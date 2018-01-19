@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Rennspiel.iml" filepath="$PROJECT_DIR$/.idea/modules/Rennspiel.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Rennspiel_main.iml" filepath="$PROJECT_DIR$/.idea/modules/Rennspiel_main.iml" group="Rennspiel" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Rennspiel_test.iml" filepath="$PROJECT_DIR$/.idea/modules/Rennspiel_test.iml" group="Rennspiel" />
+    </modules>
+  </component>
+</project>
