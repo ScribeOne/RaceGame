@@ -7,6 +7,20 @@ import org.junit.Test;
 public class Vector2DTest {
 
   @Test
+  public void normalize(){
+    Vector2D vector = new Vector2D(42.0f, 0.0f);
+    vector.normalize();
+    assertEquals(1.0f, vector.getX(),0);
+    assertEquals(0.0f, vector.getY(),0);
+  }
+
+  @Test
+  public void getLength(){
+    Vector2D vector = new Vector2D(42.0f, 23.0f);
+    assertEquals(47.8852f,vector.getLength(),0.001f);
+  }
+
+  @Test
   public void equals() {
   }
 
