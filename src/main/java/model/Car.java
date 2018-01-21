@@ -7,18 +7,38 @@ public class Car {
 
   private Vector2D position;
   private Vector2D direction;
+  private Vector2D velocity;
 
-
+  /*
+   *Constructors
+   */
   public Car() {
     this.position = new Vector2D();
     this.direction = new Vector2D();
+    this.velocity = new Vector2D();
   }
 
   public Car(Vector2D position, Vector2D direction) {
     this.position = position;
     this.direction = direction;
+    this.velocity = new Vector2D();
   }
 
+
+  /**
+   * Move the car
+   * @return
+   */
+  public void moveCar(double timeDifferenceInSeconds){
+    position.setX(position.getX() +  timeDifferenceInSeconds);
+    System.out.println(timeDifferenceInSeconds);
+  }
+
+
+
+  /*
+   *Getter and Setter
+   */
   public Vector2D getPosition() {
     return position;
   }

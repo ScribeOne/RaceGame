@@ -7,8 +7,8 @@ public class Vector2D {
 
 
   //Variables
-  private float x;
-  private float y;
+  private double x;
+  private double y;
 
   //Constructors
   public Vector2D() {
@@ -16,7 +16,7 @@ public class Vector2D {
     this.y = 0.0f;
   }
 
-  public Vector2D(float x, float y) {
+  public Vector2D(double x, double y) {
     this.x = x;
     this.y = y;
   }
@@ -28,12 +28,23 @@ public class Vector2D {
     return (this.x == other.x && this.y == other.y);
   }
 
+
+  /**
+   * Add 2 Vectors
+   */
+    public Vector2D add(Vector2D other){
+      Vector2D result = new Vector2D();
+      result.setX(this.x + other.x);
+      result.setY(this.y + other.y);
+      return result;
+    }
+
   /**
    * Calculate the distance of two Vectors with euclidean distance algorithm.
    */
   public double distance(Vector2D a, Vector2D b) {
-    float v0 = b.x - a.x;
-    float v1 = b.y - a.y;
+    double v0 = b.x - a.x;
+    double v1 = b.y - a.y;
     return Math.sqrt(v0 * v0 + v1 * v1);
   }
 
@@ -51,7 +62,7 @@ public class Vector2D {
     double length = Math.sqrt(x * x + y * y);
 
     if (length != 0.0) {
-      float s = 1.0f / (float) length;
+      double s = 1.0f / (double) length;
       x = x * s;
       y = y * s;
     }
@@ -59,19 +70,19 @@ public class Vector2D {
 
 
   //Getter and Setter
-  public float getX() {
+  public double getX() {
     return x;
   }
 
-  public void setX(float x) {
+  public void setX(double x) {
     this.x = x;
   }
 
-  public float getY() {
+  public double getY() {
     return y;
   }
 
-  public void setY(float y) {
+  public void setY(double y) {
     this.y = y;
   }
 

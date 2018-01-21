@@ -66,25 +66,24 @@ public class GameView {
     gameCanvas = new Canvas(WIDTH,HEIGHT);
     gamePane.getChildren().add(gameCanvas);
     gc = gameCanvas.getGraphicsContext2D();
-
-    Image blueCar = new Image("../resources/raceCarBlue.png");
-    Rectangle car = new Rectangle();
-    car.setWidth(150);
-    car.setHeight(100);
-    car.setLayoutX(650);
-    car.setLayoutY(400);
-    car.setFill(Color.BLACK);
-    //car.setFill();
-    gc.setFill(new ImagePattern(blueCar,0,0,1,1,true));
-    gc.fillRect(650,400,75,45);
-
-
     rootPane.getChildren().add(gamePane);
     System.out.println("setup done!");
   }
 
+  /**
+   * draw the car at its current position.
+   * @param position
+   */
   public void renderCar(Vector2D position){
-
+    Image blueCar = new Image("../resources/raceCarBlue.png");
+    Rectangle car = new Rectangle();
+    car.setWidth(150);
+    car.setHeight(100);
+    car.setLayoutX(position.getX());
+    car.setLayoutY(position.getY());
+    car.setFill(Color.BLACK);
+    gc.setFill(new ImagePattern(blueCar,0,0,1,1,true));
+    gc.fillRect(position.getX(),position.getY(),75,45);
   }
 
 }

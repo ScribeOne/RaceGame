@@ -14,13 +14,11 @@ public class GameModel {
   /**
    * initial position of the race car.
    */
-  private static final Vector2D initalPosition = new Vector2D(42.0f, 23.0f);
+  private static final Vector2D initalPosition = new Vector2D(420.0f, 230.0f);
   private static final Vector2D initalSpeed = new Vector2D(0.0f, 0.0f);
 
 
   private Track track;
-
-
 
 
   /**
@@ -29,16 +27,20 @@ public class GameModel {
   public GameModel() {
     //initialize Car, default data in GameView
     car = initializeCar();
-    System.out.println("Current position: [" + car.getPosition().getX() + "|" + car.getPosition().getY() +"]");
-
+    System.out.println(
+        "Initial position: [" + car.getPosition().getX() + "|" + car.getPosition().getY() + "]");
     track = createTrack();
-
   }
+
+  public void update(double timeDifferenceInSeconds){
+    car.moveCar(timeDifferenceInSeconds);
+    System.out.println("new Position: [" + getCarPosition().getX() + "|" + getCarPosition().getY() +"]");
+  }
+
 
   public Vector2D getCarPosition() {
     return car.getPosition();
   }
-
 
   /**
    * Initializes the track with the initial values
@@ -46,11 +48,8 @@ public class GameModel {
    * @return the initialized car
    */
   private Track createTrack() {
-
     return track;
   }
-
-
 
   /**
    * Initializes a car with the initial values
@@ -62,4 +61,5 @@ public class GameModel {
     car = new Car(initalPosition, initalSpeed);
     return car;
   }
+
 }
