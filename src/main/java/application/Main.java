@@ -24,7 +24,8 @@ public class Main extends Application {
     GameController gameController = new GameController(gameModel,gameView);
 
 
-
+    oldTime = System.currentTimeMillis() / 1000000;
+    System.out.println("current time: " + oldTime);
     /*
      * Start the gameloop.
      * It is executed every frame, the long now is the current timestamp

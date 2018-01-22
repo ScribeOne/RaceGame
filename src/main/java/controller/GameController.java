@@ -27,7 +27,7 @@ public class GameController {
   public void updateContinuously(double timeDifferenceInSeconds) {
     gameModel.update(timeDifferenceInSeconds);
     gameView.renderCar(gameModel.getCarPosition());
-    gameView.renderTrack(gameModel.getTrack());
+    //gameView.renderTrack(gameModel.getTrackCenter());
   }
 
   private void setUpInputHandler() {
