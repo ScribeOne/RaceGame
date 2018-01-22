@@ -11,6 +11,7 @@ public class GameController {
   private GameView gameView;
   private GameModel gameModel;
   private Scene scene;
+  private boolean accelerate, steerLeft, steerRight, brake;
 
   public GameController(GameModel gameModel, GameView gameView) {
     this.gameView = gameView;
@@ -18,7 +19,6 @@ public class GameController {
     this.scene = gameView.getScene();
 
     setUpInputHandler();
-
   }
 
   /**
@@ -27,20 +27,80 @@ public class GameController {
    * @param timeDifferenceInSeconds the time passed since last frame
    */
   public void updateContinuously(double timeDifferenceInSeconds) {
-    gameModel.update(timeDifferenceInSeconds);
-    gameView.renderTrack(gameModel.track.getInnerRadiusX(),gameModel.track.getInnerRadiusY(),gameModel.track.getOuterRadiusX(),gameModel.track.getOuterRadiusY());
+    updateGameModel(timeDifferenceInSeconds);
+    renderGameView();
+  }
+
+  private void renderGameView() {
+    gameView.renderTrack(gameModel.getTrack());
     gameView.renderCar(gameModel.getCarPosition());
   }
 
+  private void updateGameModel(double delta) {
+    gameModel.updateCarControl(accelerate, steerLeft, steerRight, brake);
+    gameModel.update(delta);
+  }
+
+
+  /**
+   * Pause mode: TODO
+   */
+  private void pause() {
+    //do something
+  }
+
+  /**
+   * Keyhandler to control the race car and open menus.
+   */
   private void setUpInputHandler() {
+
     scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
       @Override
       public void handle(KeyEvent event) {
-        switch (event.getCode()){
-          case UP: //do something
+        switch (event.getCode()) {
+          case UP:
+            accelerate = true;
+            System.out.println("UP pressed");
+            break;
+          case LEFT:
+            steerLeft = true;
+            break;
+          case RIGHT:
+            steerRight = true;
+            break;
+          case DOWN:
+            brake = true;
+            break;
+          case P:
+            pause();
+          case PAUSE:
+            pause();
         }
       }
-    });
-  }
+    });   //end keyPressed
+
+    scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+      @Override
+      public void handle(KeyEvent event) {
+        switch (event.getCode()) {
+          case UP:
+            accelerate = false;
+            System.out.println("UP released");
+            break;
+          case LEFT:
+            steerLeft = false;
+            break;
+          case RIGHT:
+            steerRight = false;
+            break;
+          case DOWN:
+            brake = false;
+            break;
+        }
+      }
+    });   //end keyReleased
+
+
+  }     //end event handler
 
 }

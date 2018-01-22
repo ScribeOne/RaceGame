@@ -8,13 +8,10 @@ import controller.Settings;
  */
 public class GameModel {
 
-  /**
-   * The car that is driven on the racetrack
-   */
   private Car car;
+  private Track track;
 
-  public Track track;
-
+  private boolean accelerate, steerLeft, steerRight, brake;
 
   /**
    * Creates a gameModel, that handles most of the actions
@@ -27,6 +24,16 @@ public class GameModel {
     track = initializeTrack();
   }
 
+
+  public void updateCarControl(boolean accelerate, boolean steerLeft, boolean steerRight,
+      boolean brake) {
+    this.accelerate = accelerate;
+    this.steerLeft = steerLeft;
+    this.steerRight = steerRight;
+    this.brake = brake;
+  }
+
+
   /**
    * Initialize the Track with default values in the Settings
    *
@@ -35,15 +42,22 @@ public class GameModel {
   private Track initializeTrack() {
     track = new Track(meterToPixel(Settings.INNERRADIUSX), meterToPixel(Settings.INNERRADIUSY),
         meterToPixel(Settings.OUTERRADIUSX), meterToPixel(Settings.OUTERRADIUSY));
-    System.out.println(meterToPixel(Settings.INNERRADIUSX) + " | " + meterToPixel(Settings.INNERRADIUSY)+ " | " +
-        meterToPixel(Settings.OUTERRADIUSX)+ " | " + meterToPixel(Settings.OUTERRADIUSY));
+    System.out.println(
+        meterToPixel(Settings.INNERRADIUSX) + " | " + meterToPixel(Settings.INNERRADIUSY) + " | " +
+            meterToPixel(Settings.OUTERRADIUSX) + " | " + meterToPixel(Settings.OUTERRADIUSY));
     return track;
   }
 
+  public Track getTrack() {
+    return track;
+  }
 
   public void update(double timeDifferenceInSeconds) {
-    //car.moveCar(timeDifferenceInSeconds);
-    //System.out.println("new Position: [" + getCarPosition().getX() + "|" + getCarPosition().getY() + "]");
+    if (accelerate) {
+      car.moveCar(timeDifferenceInSeconds);
+      System.out.println(
+          "new Position: [" + getCarPosition().getX() + "|" + getCarPosition().getY() + "]");
+    }
   }
 
 

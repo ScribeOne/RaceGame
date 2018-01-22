@@ -42,7 +42,7 @@ public class GameView {
    */
   public GameView(Stage stage) {
 
-    stage.setTitle("Rennspiel");
+    stage.setTitle("Race Game Beta");
     stage.setResizable(false);
     stage.sizeToScene();
 
@@ -73,29 +73,26 @@ public class GameView {
    */
   public void renderCar(Vector2D position) {
     Image blueCar = new Image("../resources/raceCarBlue.png");
-    Rectangle car = new Rectangle();
-    car.setWidth(150);
-    car.setHeight(100);
-    car.setLayoutX(position.getX());
-    car.setLayoutY(position.getY());
-    car.setFill(Color.BLACK);
     gc.setFill(new ImagePattern(blueCar, 0, 0, 1, 1, true));
-    gc.fillRect(position.getX(), position.getY(), 75, 45);
+    gc.fillRect(position.getX(), position.getY(), Settings.meterToPixel(Settings.CARWIDTH),
+        Settings.meterToPixel(Settings.CARHEIGHT));
   }
 
-  public void renderTrack(double innerX, double innerY, double outerX, double outerY) {
+  public void renderTrack(Track track) {
 
     //calculate numbers that javaFX needs to draw a ellipse
-    double innerCornerX = (Settings.WIDTH - innerX * 2) / 2;
-    double innerCornerY = (Settings.HEIGHT - innerY * 2) / 2;
-    double outerCornerX = (Settings.WIDTH - outerX * 2) / 2;
-    double outerCornerY = (Settings.HEIGHT - outerY * 2) / 2;
+    double innerCornerX = (Settings.WIDTH - track.getInnerRadiusX() * 2) / 2;
+    double innerCornerY = (Settings.HEIGHT - track.getInnerRadiusY() * 2) / 2;
+    double outerCornerX = (Settings.WIDTH - track.getOuterRadiusX() * 2) / 2;
+    double outerCornerY = (Settings.HEIGHT - track.getOuterRadiusY() * 2) / 2;
 
     gc.setFill(Color.GRAY);
-    gc.fillOval(outerCornerX,outerCornerY,outerX*2,outerY*2);
+    gc.fillOval(outerCornerX, outerCornerY, track.getOuterRadiusX() * 2,
+        track.getOuterRadiusY() * 2);
 
     gc.setFill(Color.GREEN);
-    gc.fillOval(innerCornerX,innerCornerY,innerX*2,innerY*2);
+    gc.fillOval(innerCornerX, innerCornerY, track.getInnerRadiusX() * 2,
+        track.getInnerRadiusY() * 2);
 
   }
 

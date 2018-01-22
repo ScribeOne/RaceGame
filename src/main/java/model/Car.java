@@ -21,7 +21,7 @@ public class Car {
   public Car(Vector2D position, Vector2D direction) {
     this.position = position;
     this.direction = direction;
-    this.velocity = new Vector2D(5, 0);
+    this.velocity = new Vector2D(15, 0);
   }
 
 

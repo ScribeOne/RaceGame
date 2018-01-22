@@ -17,6 +17,10 @@ public class Settings {
   static public final double OUTERRADIUSX = 55;
   static public final double OUTERRADIUSY = 35;
 
+  //size of the race car in meter
+  static public final double CARWIDTH = 4.255;
+  static public final double CARHEIGHT = 2.027;
+
   /**
    * initial position of the race car.
    */
