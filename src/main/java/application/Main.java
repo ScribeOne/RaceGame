@@ -1,5 +1,6 @@
 package application;
 
+import com.sun.javafx.perf.PerformanceTracker;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -9,6 +10,7 @@ import view.GameView;
 
 
 public class Main extends Application {
+
 
   private long oldTime;
 
@@ -57,6 +59,8 @@ public class Main extends Application {
     primaryStage.show();
 
   }
+
+
 
 
   public static void main(String[] args) {

@@ -1,6 +1,7 @@
 package view;
 
 import controller.Settings;
+import java.util.Set;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -9,8 +10,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Ellipse;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import model.Track;
 import model.Vector2D;
@@ -41,18 +40,19 @@ public class GameView {
    * @param stage the primary stage
    */
   public GameView(Stage stage) {
-
     stage.setTitle("Race Game Beta");
     stage.setResizable(false);
     stage.sizeToScene();
-
     rootPane = new StackPane();
     scene = new Scene(rootPane, Settings.WIDTH, Settings.HEIGHT);
-
     setUpGameWindow();
-
     stage.setScene(scene);
   }
+
+  public void clear(){
+    gc.clearRect(0,0,Settings.WIDTH, Settings.HEIGHT);
+  }
+
 
   /**
    * Sets up the main game window with the course as panebackground,
@@ -64,8 +64,6 @@ public class GameView {
     gamePane.getChildren().add(gameCanvas);
     gc = gameCanvas.getGraphicsContext2D();
     rootPane.getChildren().add(gamePane);
-    gc.setFill(Color.GREEN);
-    gc.fillRect(0, 0, Settings.WIDTH, Settings.HEIGHT);
   }
 
   /**
@@ -79,6 +77,8 @@ public class GameView {
   }
 
   public void renderTrack(Track track) {
+    gc.setFill(Color.GREEN);
+    gc.fillRect(0, 0, Settings.WIDTH, Settings.HEIGHT);
 
     //calculate numbers that javaFX needs to draw a ellipse
     double innerCornerX = (Settings.WIDTH - track.getInnerRadiusX() * 2) / 2;

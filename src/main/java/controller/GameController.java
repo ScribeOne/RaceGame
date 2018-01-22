@@ -17,7 +17,6 @@ public class GameController {
     this.gameView = gameView;
     this.gameModel = gameModel;
     this.scene = gameView.getScene();
-
     setUpInputHandler();
   }
 
@@ -31,15 +30,19 @@ public class GameController {
     renderGameView();
   }
 
+
   private void renderGameView() {
+    gameView.clear();
     gameView.renderTrack(gameModel.getTrack());
     gameView.renderCar(gameModel.getCarPosition());
   }
+
 
   private void updateGameModel(double delta) {
     gameModel.updateCarControl(accelerate, steerLeft, steerRight, brake);
     gameModel.update(delta);
   }
+
 
 
   /**
