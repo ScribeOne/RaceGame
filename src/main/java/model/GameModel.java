@@ -17,8 +17,14 @@ public class GameModel {
   private static final Vector2D initalPosition = new Vector2D(420.0f, 230.0f);
   private static final Vector2D initalSpeed = new Vector2D(0.0f, 0.0f);
 
-
+  // setup race track
   private Track track;
+  private int centerX = 300;
+  private int centerY = 150;
+  private int innerX = 900;
+  private int innerY = 500;
+  private int outerX = 1100;
+  private int outerY = 700;
 
 
   /**
@@ -32,9 +38,10 @@ public class GameModel {
     track = createTrack();
   }
 
-  public void update(double timeDifferenceInSeconds){
+  public void update(double timeDifferenceInSeconds) {
     car.moveCar(timeDifferenceInSeconds);
-    System.out.println("new Position: [" + getCarPosition().getX() + "|" + getCarPosition().getY() +"]");
+    System.out
+        .println("new Position: [" + getCarPosition().getX() + "|" + getCarPosition().getY() + "]");
   }
 
 
@@ -45,9 +52,14 @@ public class GameModel {
   /**
    * Initializes the track with the initial values
    *
-   * @return the initialized car
+   * @return the initialized track
    */
   private Track createTrack() {
+    track = new Track(centerX, centerY, innerX, innerY, outerX, outerY);
+    return track;
+  }
+
+  public Track getTrack() {
     return track;
   }
 

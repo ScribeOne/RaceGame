@@ -21,19 +21,18 @@ public class Car {
   public Car(Vector2D position, Vector2D direction) {
     this.position = position;
     this.direction = direction;
-    this.velocity = new Vector2D();
+    this.velocity = new Vector2D(5, 0);
   }
 
 
   /**
    * Move the car
-   * @return
    */
-  public void moveCar(double timeDifferenceInSeconds){
-    position.setX(position.getX() +  timeDifferenceInSeconds);
+  public void moveCar(double timeDifferenceInSeconds) {
+    Vector2D helper = velocity.multiply(timeDifferenceInSeconds);
+    position = helper.add(position);
     System.out.println(timeDifferenceInSeconds);
   }
-
 
 
   /*

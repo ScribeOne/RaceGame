@@ -32,12 +32,12 @@ public class Vector2D {
   /**
    * Add 2 Vectors
    */
-    public Vector2D add(Vector2D other){
-      Vector2D result = new Vector2D();
-      result.setX(this.x + other.x);
-      result.setY(this.y + other.y);
-      return result;
-    }
+  public Vector2D add(Vector2D other) {
+    Vector2D result = new Vector2D();
+    result.setX(this.x + other.x);
+    result.setY(this.y + other.y);
+    return result;
+  }
 
   /**
    * Calculate the distance of two Vectors with euclidean distance algorithm.
@@ -49,10 +49,17 @@ public class Vector2D {
   }
 
   /**
+   * Multiply the vector with a given number.
+   */
+  public Vector2D multiply(double scalar) {
+    return (new Vector2D(x * scalar, y * scalar));
+  }
+
+  /**
    * get the length of a vector.
    */
-  public double getLength(){
-    return Math.sqrt(x*x+y*y);
+  public double getLength() {
+    return Math.sqrt(x * x + y * y);
   }
 
   /**
