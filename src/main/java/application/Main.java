@@ -24,7 +24,7 @@ public class Main extends Application {
     GameController gameController = new GameController(gameModel,gameView);
 
 
-    oldTime = System.currentTimeMillis() / 1000000;
+    oldTime = System.currentTimeMillis();
     System.out.println("current time: " + oldTime);
     /*
      * Start the gameloop.

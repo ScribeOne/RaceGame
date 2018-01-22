@@ -1,5 +1,6 @@
 package view;
 
+import controller.Settings;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -18,10 +19,6 @@ import model.Vector2D;
  * Contains all GUI Elements
  */
 public class GameView {
-
-  //Dimensions of the application window
-  private final int WIDTH = 1300;
-  private final int HEIGHT = 800;
 
 
   private Canvas gameCanvas;
@@ -50,7 +47,7 @@ public class GameView {
     stage.sizeToScene();
 
     rootPane = new StackPane();
-    scene = new Scene(rootPane, WIDTH, HEIGHT);
+    scene = new Scene(rootPane, Settings.WIDTH, Settings.HEIGHT);
 
     setUpGameWindow();
 
@@ -63,11 +60,12 @@ public class GameView {
    */
   private void setUpGameWindow() {
     gamePane = new Pane();
-    gameCanvas = new Canvas(WIDTH, HEIGHT);
+    gameCanvas = new Canvas(Settings.WIDTH, Settings.HEIGHT);
     gamePane.getChildren().add(gameCanvas);
     gc = gameCanvas.getGraphicsContext2D();
     rootPane.getChildren().add(gamePane);
-    System.out.println("setup done!");
+    gc.setFill(Color.GREEN);
+    gc.fillRect(0, 0, Settings.WIDTH, Settings.HEIGHT);
   }
 
   /**
@@ -85,7 +83,19 @@ public class GameView {
     gc.fillRect(position.getX(), position.getY(), 75, 45);
   }
 
-  public void renderTrack(Vector2D center, Vector2D inner, Vector2D outer) {
+  public void renderTrack(double innerX, double innerY, double outerX, double outerY) {
+
+    //calculate numbers that javaFX needs to draw a ellipse
+    double innerCornerX = (Settings.WIDTH - innerX * 2) / 2;
+    double innerCornerY = (Settings.HEIGHT - innerY * 2) / 2;
+    double outerCornerX = (Settings.WIDTH - outerX * 2) / 2;
+    double outerCornerY = (Settings.HEIGHT - outerY * 2) / 2;
+
+    gc.setFill(Color.GRAY);
+    gc.fillOval(outerCornerX,outerCornerY,outerX*2,outerY*2);
+
+    gc.setFill(Color.GREEN);
+    gc.fillOval(innerCornerX,innerCornerY,innerX*2,innerY*2);
 
   }
 

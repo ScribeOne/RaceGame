@@ -1,46 +1,76 @@
 package model;
 
+import controller.Settings;
+
 /**
- * Class to represent the race track with 2 Ellipses.
+ * Class to represent the race track.
  */
 public class Track {
+  private double centerX;
+  private double centerY;
+  private double innerRadiusX;
+  private double innerRadiusY;
+  private double outerRadiusX;
+  private double outerRadiusY;
 
-    Vector2D center;
-    Vector2D innerRadius;
-    Vector2D outerRadius;
+  public Track(double innerRadiusX, double innerRadiusY,
+      double outerRadiusX, double outerRadiusY) {
+    this.centerX = 0;
+    this.centerY = 0;
+    this.innerRadiusX = innerRadiusX;
+    this.innerRadiusY = innerRadiusY;
+    this.outerRadiusX = outerRadiusX;
+    this.outerRadiusY = outerRadiusY;
+  }
 
-    public Track(Vector2D center, Vector2D innerRadius, Vector2D outerRadius) {
-        this.center = center;
-        this.innerRadius = innerRadius;
-        this.outerRadius = outerRadius;
-    }
+  public Track() {
+  }
 
-    public Vector2D getInnerCorner() {
-        Vector2D helper = new Vector2D();
-        return helper;
-    }
+  public double getCenterX() {
+    return centerX;
+  }
 
-    public Vector2D getCenter() {
-        return center;
-    }
+  public void setCenterX(double centerX) {
+    this.centerX = centerX;
+  }
 
-    public void setCenter(Vector2D center) {
-        this.center = center;
-    }
+  public double getCenterY() {
+    return centerY;
+  }
 
-    public Vector2D getInnerRadius() {
-        return innerRadius;
-    }
+  public void setCenterY(double centerY) {
+    this.centerY = centerY;
+  }
 
-    public void setInnerRadius(Vector2D innerRadius) {
-        this.innerRadius = innerRadius;
-    }
+  public double getInnerRadiusX() {
+    return innerRadiusX;
+  }
 
-    public Vector2D getOuterRadius() {
-        return outerRadius;
-    }
+  public void setInnerRadiusX(double innerRadiusX) {
+    this.innerRadiusX = innerRadiusX;
+  }
 
-    public void setOuterRadius(Vector2D outerRadius) {
-        this.outerRadius = outerRadius;
-    }
+  public double getInnerRadiusY() {
+    return innerRadiusY;
+  }
+
+  public void setInnerRadiusY(double innerRadiusY) {
+    this.innerRadiusY = innerRadiusY;
+  }
+
+  public double getOuterRadiusX() {
+    return outerRadiusX;
+  }
+
+  public void setOuterRadiusX(double outerRadiusX) {
+    this.outerRadiusX = outerRadiusX;
+  }
+
+  public double getOuterRadiusY() {
+    return outerRadiusY;
+  }
+
+  public void setOuterRadiusY(double outerRadiusY) {
+    this.outerRadiusY = outerRadiusY;
+  }
 }
