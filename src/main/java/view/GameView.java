@@ -25,9 +25,6 @@ public class GameView {
   private Canvas gameCanvas;
   private Canvas carCanvas;
   private GraphicsContext gc;
-  private GraphicsContext carGC;
-  private double currentAngle;
-  private Rotate rotate;
 
   private Scene scene;
 
@@ -57,7 +54,6 @@ public class GameView {
 
   public void clear() {
     gc.clearRect(0, 0, Settings.WIDTH, Settings.HEIGHT);
-    carGC.clearRect(0, 0, Settings.WIDTH, Settings.HEIGHT);
   }
 
 
@@ -71,21 +67,9 @@ public class GameView {
     carCanvas = new Canvas(Settings.WIDTH, Settings.HEIGHT);
     gamePane.getChildren().addAll(gameCanvas, carCanvas);
     gc = gameCanvas.getGraphicsContext2D();
-    carGC = carCanvas.getGraphicsContext2D();
     rootPane.getChildren().add(gamePane);
-    rotate = new Rotate();
-    currentAngle = 180;
   }
 
-  /*
-  public double getNewAngle(double newAngle) {
-    if (newAngle != currentAngle) {
-      return newAngle - currentAngle;
-    } else {
-      return 0;
-    }
-  }
-  */
 
   /**
    * draw the car at its current position.
@@ -94,15 +78,18 @@ public class GameView {
     Image blueCar = new Image("../resources/raceCarBlue.png");
     double PivotX = (position.getX() + Settings.meterToPixel(Settings.CARWIDTH) / 2);
     double PivotY = (position.getY() + Settings.meterToPixel(Settings.CARHEIGHT) / 2);
-    carGC.save();
-    carGC.transform(new Affine(new Rotate(newAngle, PivotX, PivotY)));
-    carGC.setFill(new ImagePattern(blueCar, 0, 0, 1, 1, true));
-    carGC.fillRect(position.getX(), position.getY(), Settings.meterToPixel(Settings.CARWIDTH),
+    gc.save();
+    gc.transform(new Affine(new Rotate(newAngle, PivotX, PivotY)));
+    gc.setFill(new ImagePattern(blueCar, 0, 0, 1, 1, true));
+    gc.fillRect(position.getX(), position.getY(), Settings.meterToPixel(Settings.CARWIDTH),
         Settings.meterToPixel(Settings.CARHEIGHT));
-    carGC.restore();
+    gc.restore();
 
   }
 
+  /**
+   * Render Track including background. Color of background and track can be changed in "Setting.java".
+   */
   public void renderTrack(Track track) {
     gc.setFill(Color.GREEN);
     gc.fillRect(0, 0, Settings.WIDTH, Settings.HEIGHT);

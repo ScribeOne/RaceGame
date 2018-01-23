@@ -25,6 +25,9 @@ public class Settings {
   public static final Vector2D initialPosition = new Vector2D(750.0f, 90.0f);
   public static final Vector2D INITIALDIRECTION = new Vector2D(-1.0f, 0.0f);
 
+  /**
+   * Needed to define where zero degree is. (1,0) represents the x-Axis. Degree is ascending counter-clockwise.
+   */
   public static final Vector2D ZERODEGREES = new Vector2D(1, 0);
 
   // acceleration and brake values

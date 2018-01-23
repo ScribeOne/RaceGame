@@ -24,7 +24,9 @@ public class GameModel {
     track = initializeTrack();
   }
 
-
+  /**
+   * Update the car control flags according to the key events for the current timeframe. Game controller should handle key events.
+   */
   public void updateCarControl(boolean accelerate, boolean steerLeft, boolean steerRight,
       boolean brake) {
     this.accelerate = accelerate;
@@ -70,13 +72,10 @@ public class GameModel {
     if (steerLeft) {
       car.steerLeft();
     }
-
     // System.out.println("new direction: " + car.getDirection().getX() + " | " + car.getDirection().getY());
-
     System.out.println(
         "Angle as Cross Product: " + car.getDirection().crossProduct(Settings.ZERODEGREES));
     System.out.println("Angle in degree: " + car.getAngle());
-
     car.moveCar(delta);
     //System.out.println("new Position: [" + getCarPosition().getX() + "|" + getCarPosition().getY() + "]");
 
@@ -103,6 +102,9 @@ public class GameModel {
     return car;
   }
 
+  /**
+   * Set the car back to starting position with direction west(180°) and velocity to zero.
+   */
   public void resetCar() {
     car.setPosition(Settings.initialPosition);
     car.resetDirection();
