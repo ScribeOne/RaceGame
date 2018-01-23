@@ -52,12 +52,31 @@ public class GameModel {
     return track;
   }
 
-  public void update(double timeDifferenceInSeconds) {
+  /**
+   * update vectors of the car accodring to the pressed keys in the current timeframe.
+   * @param delta elapsed time for calculations
+   */
+  public void updateCar(double delta) {
     if (accelerate) {
-      car.moveCar(timeDifferenceInSeconds);
-      System.out.println(
-          "new Position: [" + getCarPosition().getX() + "|" + getCarPosition().getY() + "]");
+      car.accelerateCar(Settings.ACCELERATIONVALUE);
     }
+    if (brake){
+      car.brake(Settings.BRAKEVALUE);
+    }
+    if(steerRight){
+      car.steerRight();
+    }
+    if(steerLeft){
+      car.steerLeft();
+    }
+
+    System.out.println("new direction: " + car.getDirection().getX() + " | " + car.getDirection().getY());
+
+
+    car.moveCar(delta);
+    //System.out.println(
+     //   "new Position: [" + getCarPosition().getX() + "|" + getCarPosition().getY() + "]");
+
   }
 
 
@@ -73,7 +92,7 @@ public class GameModel {
    */
   private Car initializeCar() {
     //initialize a new car and give it the init values set in the static variables
-    car = new Car(Settings.initialPosition, Settings.initialSpeed);
+    car = new Car(Settings.initialPosition, Settings.INITIALDIRECTION);
     return car;
   }
 

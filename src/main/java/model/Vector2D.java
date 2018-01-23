@@ -39,6 +39,7 @@ public class Vector2D {
     return result;
   }
 
+
   /**
    * Calculate the distance of two Vectors with euclidean distance algorithm.
    */
@@ -53,6 +54,13 @@ public class Vector2D {
    */
   public Vector2D multiply(double scalar) {
     return (new Vector2D(x * scalar, y * scalar));
+  }
+
+  /**
+   * Multiply the vector with another vector.
+   */
+  public Vector2D multiply(Vector2D other) {
+    return new Vector2D(x * other.x, y * other.y);
   }
 
   /**

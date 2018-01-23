@@ -40,7 +40,7 @@ public class GameController {
 
   private void updateGameModel(double delta) {
     gameModel.updateCarControl(accelerate, steerLeft, steerRight, brake);
-    gameModel.update(delta);
+    gameModel.updateCar(delta);
   }
 
 

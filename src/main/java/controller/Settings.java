@@ -21,11 +21,14 @@ public class Settings {
   static public final double CARWIDTH = 4.255;
   static public final double CARHEIGHT = 2.027;
 
-  /**
-   * initial position of the race car.
-   */
+  // initial position of the race car
   public static final Vector2D initialPosition = new Vector2D(420.0f, 230.0f);
-  public static final Vector2D initialSpeed = new Vector2D(0.0f, 0.0f);
+  public static final Vector2D INITIALDIRECTION = new Vector2D(1.0f, 0.0f);
+
+  // acceleration and brake values
+  public static final double ACCELERATIONVALUE = 5;
+  public static final double BRAKEVALUE = -5;
+
 
   //Methods to convert Pixel <-> Meter
   static public double meterToPixel(double input) {
