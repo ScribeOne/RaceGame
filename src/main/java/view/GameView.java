@@ -10,6 +10,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.transform.Affine;
+import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import model.Track;
 import model.Vector2D;
@@ -21,7 +23,11 @@ public class GameView {
 
 
   private Canvas gameCanvas;
+  private Canvas carCanvas;
   private GraphicsContext gc;
+  private GraphicsContext carGC;
+  private double currentAngle;
+  private Rotate rotate;
 
   private Scene scene;
 
@@ -49,8 +55,9 @@ public class GameView {
     stage.setScene(scene);
   }
 
-  public void clear(){
-    gc.clearRect(0,0,Settings.WIDTH, Settings.HEIGHT);
+  public void clear() {
+    gc.clearRect(0, 0, Settings.WIDTH, Settings.HEIGHT);
+    carGC.clearRect(0, 0, Settings.WIDTH, Settings.HEIGHT);
   }
 
 
@@ -61,19 +68,39 @@ public class GameView {
   private void setUpGameWindow() {
     gamePane = new Pane();
     gameCanvas = new Canvas(Settings.WIDTH, Settings.HEIGHT);
-    gamePane.getChildren().add(gameCanvas);
+    carCanvas = new Canvas(Settings.WIDTH, Settings.HEIGHT);
+    gamePane.getChildren().addAll(gameCanvas, carCanvas);
     gc = gameCanvas.getGraphicsContext2D();
+    carGC = carCanvas.getGraphicsContext2D();
     rootPane.getChildren().add(gamePane);
+    rotate = new Rotate();
+    currentAngle = 180;
   }
+
+  /*
+  public double getNewAngle(double newAngle) {
+    if (newAngle != currentAngle) {
+      return newAngle - currentAngle;
+    } else {
+      return 0;
+    }
+  }
+  */
 
   /**
    * draw the car at its current position.
    */
-  public void renderCar(Vector2D position) {
+  public void renderCar(Vector2D position, double newAngle) {
     Image blueCar = new Image("../resources/raceCarBlue.png");
-    gc.setFill(new ImagePattern(blueCar, 0, 0, 1, 1, true));
-    gc.fillRect(position.getX(), position.getY(), Settings.meterToPixel(Settings.CARWIDTH),
+    double PivotX = (position.getX() + Settings.meterToPixel(Settings.CARWIDTH) / 2);
+    double PivotY = (position.getY() + Settings.meterToPixel(Settings.CARHEIGHT) / 2);
+    carGC.save();
+    carGC.transform(new Affine(new Rotate(newAngle, PivotX, PivotY)));
+    carGC.setFill(new ImagePattern(blueCar, 0, 0, 1, 1, true));
+    carGC.fillRect(position.getX(), position.getY(), Settings.meterToPixel(Settings.CARWIDTH),
         Settings.meterToPixel(Settings.CARHEIGHT));
+    carGC.restore();
+
   }
 
   public void renderTrack(Track track) {

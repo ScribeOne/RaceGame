@@ -12,6 +12,7 @@ public class GameController {
   private GameModel gameModel;
   private Scene scene;
   private boolean accelerate, steerLeft, steerRight, brake;
+  private double oldAngle;
 
   public GameController(GameModel gameModel, GameView gameView) {
     this.gameView = gameView;
@@ -34,7 +35,9 @@ public class GameController {
   private void renderGameView() {
     gameView.clear();
     gameView.renderTrack(gameModel.getTrack());
-    gameView.renderCar(gameModel.getCarPosition());
+  //  System.out.println(gameView.getNewAngle(gameModel.getCarAngle()));
+    gameView.renderCar(gameModel.getCarPosition(),gameModel.getCarAngle());
+
   }
 
 
@@ -43,6 +46,10 @@ public class GameController {
     gameModel.updateCar(delta);
   }
 
+
+  private void reset() {
+    gameModel.resetCar();
+  }
 
 
   /**
@@ -76,8 +83,8 @@ public class GameController {
             break;
           case P:
             pause();
-          case PAUSE:
-            pause();
+          case R:
+            reset();
         }
       }
     });   //end keyPressed

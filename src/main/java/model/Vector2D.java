@@ -70,6 +70,27 @@ public class Vector2D {
     return Math.sqrt(x * x + y * y);
   }
 
+  public double getAngle(Vector2D vector1, Vector2D vector2) {
+    double helper = Math.atan2(vector1.getX() * vector2.getY() - vector1.getY() * vector2.getX(),
+        vector1.crossProduct(vector2));
+    helper = (helper / Math.PI) * 180;
+    helper = helper * -1;
+    if (helper < 0) {
+      helper = 360 - helper * -1;
+    }
+    return helper;
+  }
+
+  public double crossProduct(Vector2D other) {
+    return x * other.getX() + y * other.getY();
+  }
+
+
+  public void rotate(double n) {
+    x = (x * Math.cos(n)) - (y * Math.sin(n));
+    y = (x * Math.sin(n)) + (y * Math.cos(n));
+  }
+
   /**
    * Normalize a Vector to 1, but keep the direction its pointing to.
    */

@@ -54,34 +54,41 @@ public class GameModel {
 
   /**
    * update vectors of the car accodring to the pressed keys in the current timeframe.
+   *
    * @param delta elapsed time for calculations
    */
   public void updateCar(double delta) {
     if (accelerate) {
       car.accelerateCar(Settings.ACCELERATIONVALUE);
     }
-    if (brake){
+    if (brake) {
       car.brake(Settings.BRAKEVALUE);
     }
-    if(steerRight){
+    if (steerRight) {
       car.steerRight();
     }
-    if(steerLeft){
+    if (steerLeft) {
       car.steerLeft();
     }
 
-    System.out.println("new direction: " + car.getDirection().getX() + " | " + car.getDirection().getY());
+    // System.out.println("new direction: " + car.getDirection().getX() + " | " + car.getDirection().getY());
 
+    System.out.println(
+        "Angle as Cross Product: " + car.getDirection().crossProduct(Settings.ZERODEGREES));
+    System.out.println("Angle in degree: " + car.getAngle());
 
     car.moveCar(delta);
-    //System.out.println(
-     //   "new Position: [" + getCarPosition().getX() + "|" + getCarPosition().getY() + "]");
+    //System.out.println("new Position: [" + getCarPosition().getX() + "|" + getCarPosition().getY() + "]");
 
   }
 
 
   public Vector2D getCarPosition() {
     return car.getPosition();
+  }
+
+  public double getCarAngle() {
+    return car.getAngle();
   }
 
 
@@ -95,6 +102,13 @@ public class GameModel {
     car = new Car(Settings.initialPosition, Settings.INITIALDIRECTION);
     return car;
   }
+
+  public void resetCar() {
+    car.setPosition(Settings.initialPosition);
+    car.resetDirection();
+    car.setVelocity(0);
+  }
+
 
   //Methods to convert Pixel <-> Meter
   private double meterToPixel(double input) {

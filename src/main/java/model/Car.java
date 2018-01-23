@@ -1,5 +1,7 @@
 package model;
 
+import controller.Settings;
+
 /**
  * Represents the race-car in the game
  */
@@ -20,24 +22,28 @@ public class Car {
 
   public Car(Vector2D position, Vector2D direction) {
     this.position = position;
-    this.direction = new Vector2D(1,0);
+    this.direction = direction;
     this.velocity = 0;
   }
 
-  public void steerRight(){
-    direction = direction.add(new Vector2D(-0.1,0.01));
+  public void steerRight() {
+    direction.rotate(0.03);
   }
 
-  public void steerLeft(){
-    direction = direction.add(new Vector2D(0.01,-0.1));
+  public void steerLeft() {
+    direction.rotate(-0.03);
   }
 
   public void accelerateCar(double value) {
-    velocity += value;
-    System.out.println("new velocity: "+ velocity);
+    if (velocity >= Settings.MAXSPEED) {
+      velocity = Settings.MAXSPEED;
+    } else {
+      velocity += value;
+    }
+    System.out.println("new velocity: " + velocity);
   }
 
-  public void brake(double brakeValue){
+  public void brake(double brakeValue) {
     velocity += brakeValue;
   }
 
@@ -46,10 +52,24 @@ public class Car {
     position = position.add(direction.multiply(velocity).multiply(delta));
   }
 
+  public double getAngle() {
+    return direction.getAngle(direction, Settings.ZERODEGREES);
+  }
+
+  public void resetDirection(){
+    direction.setX(Settings.INITIALDIRECTION.getX());
+    direction.setY(0);
+  }
+
 
   /*
    *Getter and Setter
    */
+
+  public void setVelocity(double velocity) {
+    this.velocity = velocity;
+  }
+
   public Vector2D getPosition() {
     return position;
   }
