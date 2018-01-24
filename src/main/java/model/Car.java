@@ -40,11 +40,14 @@ public class Car {
     } else {
       velocity += value;
     }
-    System.out.println("new velocity: " + velocity);
   }
 
   public void brake(double brakeValue) {
-    velocity += brakeValue;
+    if (velocity <= Settings.MAXSPEED * -1) {
+      velocity = Settings.MAXSPEED * -1;
+    } else {
+      velocity += brakeValue;
+    }
   }
 
   public void moveCar(double delta) {
@@ -56,7 +59,7 @@ public class Car {
     return direction.getAngle(direction, Settings.ZERODEGREES);
   }
 
-  public void resetDirection(){
+  public void resetDirection() {
     direction.setX(Settings.INITIALDIRECTION.getX());
     direction.setY(0);
   }
@@ -72,6 +75,10 @@ public class Car {
 
   public Vector2D getPosition() {
     return position;
+  }
+
+  public double getVelocity() {
+    return velocity;
   }
 
   public void setPosition(Vector2D position) {

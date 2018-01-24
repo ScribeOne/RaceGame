@@ -12,7 +12,6 @@ public class GameController {
   private GameModel gameModel;
   private Scene scene;
   private boolean accelerate, steerLeft, steerRight, brake;
-  private double oldAngle;
 
   public GameController(GameModel gameModel, GameView gameView) {
     this.gameView = gameView;
@@ -22,7 +21,7 @@ public class GameController {
   }
 
   /**
-   * Updates all needed dependencies every frame
+   * Updates all needed dependencies every frame. GAME LOOP
    *
    * @param timeDifferenceInSeconds the time passed since last frame
    */
@@ -35,8 +34,7 @@ public class GameController {
   private void renderGameView() {
     gameView.clear();
     gameView.renderTrack(gameModel.getTrack());
-  //  System.out.println(gameView.getNewAngle(gameModel.getCarAngle()));
-    gameView.renderCar(gameModel.getCarPosition(),gameModel.getCarAngle());
+    gameView.renderCar(gameModel.getCarPosition(), gameModel.getCarAngle());
 
   }
 

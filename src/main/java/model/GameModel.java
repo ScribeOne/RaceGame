@@ -17,12 +17,21 @@ public class GameModel {
    * Creates a gameModel, that handles most of the actions
    */
   public GameModel() {
-    //initialize Car, default data in GameView
     car = initializeCar();
-    System.out.println(
-        "Initial position: [" + car.getPosition().getX() + "|" + car.getPosition().getY() + "]");
     track = initializeTrack();
+    track.createObstacles(Settings.OBSTACLEAMOUNT);
   }
+
+
+  private void calculateResistance() {
+
+  }
+
+  private double calculateAirResistance() {
+    return Settings.AIRFACTOR * Settings.CARSURFACE * (Settings.AIRDENSITY / 2) * car.getVelocity()
+        * car.getVelocity();
+  }
+
 
   /**
    * Update the car control flags according to the key events for the current timeframe. Game controller should handle key events.
@@ -35,22 +44,15 @@ public class GameModel {
     this.brake = brake;
   }
 
-
   /**
    * Initialize the Track with default values in the Settings
    *
    * @return initialized track
    */
   private Track initializeTrack() {
-    track = new Track(meterToPixel(Settings.INNERRADIUSX), meterToPixel(Settings.INNERRADIUSY),
-        meterToPixel(Settings.OUTERRADIUSX), meterToPixel(Settings.OUTERRADIUSY));
-    System.out.println(
-        meterToPixel(Settings.INNERRADIUSX) + " | " + meterToPixel(Settings.INNERRADIUSY) + " | " +
-            meterToPixel(Settings.OUTERRADIUSX) + " | " + meterToPixel(Settings.OUTERRADIUSY));
-    return track;
-  }
-
-  public Track getTrack() {
+    track = new Track(Settings.meterToPixel(Settings.INNERRADIUSX),
+        Settings.meterToPixel(Settings.INNERRADIUSY),
+        Settings.meterToPixel(Settings.OUTERRADIUSX), Settings.meterToPixel(Settings.OUTERRADIUSY));
     return track;
   }
 
@@ -72,22 +74,8 @@ public class GameModel {
     if (steerLeft) {
       car.steerLeft();
     }
-    // System.out.println("new direction: " + car.getDirection().getX() + " | " + car.getDirection().getY());
-    System.out.println(
-        "Angle as Cross Product: " + car.getDirection().crossProduct(Settings.ZERODEGREES));
-    System.out.println("Angle in degree: " + car.getAngle());
+    System.out.println(calculateAirResistance());
     car.moveCar(delta);
-    //System.out.println("new Position: [" + getCarPosition().getX() + "|" + getCarPosition().getY() + "]");
-
-  }
-
-
-  public Vector2D getCarPosition() {
-    return car.getPosition();
-  }
-
-  public double getCarAngle() {
-    return car.getAngle();
   }
 
 
@@ -111,14 +99,16 @@ public class GameModel {
     car.setVelocity(0);
   }
 
-
-  //Methods to convert Pixel <-> Meter
-  private double meterToPixel(double input) {
-    return input * 10;
+  public Track getTrack() {
+    return track;
   }
 
-  private double pixelToMeter(double input) {
-    return input / 10;
+  public Vector2D getCarPosition() {
+    return car.getPosition();
+  }
+
+  public double getCarAngle() {
+    return car.getAngle();
   }
 
 }
