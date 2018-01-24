@@ -4,7 +4,6 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import model.GameModel;
-import model.Vector2D;
 import view.GameView;
 
 public class GameController {
@@ -13,7 +12,8 @@ public class GameController {
   private GameModel gameModel;
   private Scene scene;
   private boolean accelerate, steerLeft, steerRight, brake, pause;
-  private double oldVelocity;
+  private int counter;
+  private double timeBuffer;
 
   public GameController(GameModel gameModel, GameView gameView) {
     this.gameView = gameView;
@@ -29,15 +29,22 @@ public class GameController {
    */
   public void updateContinuously(double timeDifferenceInSeconds) {
     updateGameModel(timeDifferenceInSeconds);
-    renderGameView();
+    renderGameView(timeDifferenceInSeconds);
   }
 
 
-  private void renderGameView() {
+  private void renderGameView(double delta) {
+    counter++;
+    timeBuffer += delta;
+    if(counter == 60){
+      System.out.println("FPS: " + timeBuffer*60);
+      counter = 0;
+      timeBuffer = 0;
+    }
     gameView.clear();
     gameView.renderTrack(gameModel.getTrack());
     gameView.renderCar(gameModel.getCarPosition(), gameModel.getCarAngle());
-    if(pause){
+    if (pause) {
       gameView.showPause();
     }
   }

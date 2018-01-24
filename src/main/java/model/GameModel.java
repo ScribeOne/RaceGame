@@ -76,7 +76,6 @@ public class GameModel {
     if (steerLeft) {
       car.steerLeft();
     }
-    System.out.println(calculateAirResistance());
     car.moveCar(delta);
   }
 
