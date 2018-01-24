@@ -16,6 +16,7 @@ public class Settings {
   public static final Color STREETCOLOR = Color.rgb(25, 25, 25);
   public static final Color BACKGROUND = Color.rgb(101, 67, 33);
   public static final Color OBSTACLECOLOR = Color.rgb(109, 9, 9);
+  public static final Color PAUSECOLOR = Color.rgb(0, 0, 0, 0.5);
 
   //2 Ellipses that define the race track, size in meters
   static public final double INNERRADIUSX = 45;

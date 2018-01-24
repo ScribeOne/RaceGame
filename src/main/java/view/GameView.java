@@ -4,6 +4,7 @@ import controller.Settings;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.Set;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -12,6 +13,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
@@ -71,6 +74,19 @@ public class GameView {
     gamePane.getChildren().addAll(gameCanvas, carCanvas);
     gc = gameCanvas.getGraphicsContext2D();
     rootPane.getChildren().add(gamePane);
+  }
+
+  public void showPause() {
+    gc.setFill(Settings.PAUSECOLOR);
+    gc.fillRect(0, 0, Settings.WIDTH, Settings.HEIGHT);
+    gc.setTextAlign(TextAlignment.CENTER);
+    gc.setTextBaseline(VPos.CENTER);
+    gc.setFont(new Font(40));
+    gc.fillText(
+        "Paused - Press P to continue",
+        Math.round(gameCanvas.getWidth() / 2),
+        Math.round(gameCanvas.getHeight() / 2)
+    );
   }
 
 

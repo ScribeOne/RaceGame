@@ -10,6 +10,7 @@ public class GameModel {
 
   private Car car;
   private Track track;
+  private double oldVelocity;
 
   private boolean accelerate, steerLeft, steerRight, brake;
 
@@ -20,6 +21,7 @@ public class GameModel {
     car = initializeCar();
     track = initializeTrack();
     track.createObstacles(Settings.OBSTACLEAMOUNT);
+    oldVelocity = 0;
   }
 
 
@@ -97,6 +99,16 @@ public class GameModel {
     car.setPosition(Settings.initialPosition);
     car.resetDirection();
     car.setVelocity(0);
+    track.createObstacles(Settings.OBSTACLEAMOUNT);
+  }
+
+  public void toggleVelocity() {
+    double buffer = car.getVelocity();
+    car.setVelocity(oldVelocity);
+    oldVelocity = buffer;
+    if (car.getVelocity() != 0 && oldVelocity != 0) {
+      oldVelocity = 0;
+    }
   }
 
   public Track getTrack() {

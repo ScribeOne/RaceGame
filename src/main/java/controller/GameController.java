@@ -4,6 +4,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import model.GameModel;
+import model.Vector2D;
 import view.GameView;
 
 public class GameController {
@@ -11,7 +12,8 @@ public class GameController {
   private GameView gameView;
   private GameModel gameModel;
   private Scene scene;
-  private boolean accelerate, steerLeft, steerRight, brake;
+  private boolean accelerate, steerLeft, steerRight, brake, pause;
+  private double oldVelocity;
 
   public GameController(GameModel gameModel, GameView gameView) {
     this.gameView = gameView;
@@ -35,13 +37,17 @@ public class GameController {
     gameView.clear();
     gameView.renderTrack(gameModel.getTrack());
     gameView.renderCar(gameModel.getCarPosition(), gameModel.getCarAngle());
-
+    if(pause){
+      gameView.showPause();
+    }
   }
 
 
   private void updateGameModel(double delta) {
-    gameModel.updateCarControl(accelerate, steerLeft, steerRight, brake);
-    gameModel.updateCar(delta);
+    if (!pause) {
+      gameModel.updateCarControl(accelerate, steerLeft, steerRight, brake);
+      gameModel.updateCar(delta);
+    }
   }
 
 
@@ -54,8 +60,15 @@ public class GameController {
    * Pause mode: TODO
    */
   private void pause() {
-    //do something
+    if (!pause) {
+      gameModel.toggleVelocity();
+      pause = true;
+    } else {
+      gameModel.toggleVelocity();
+      pause = false;
+    }
   }
+
 
   /**
    * Keyhandler to control the race car and open menus.
@@ -68,7 +81,6 @@ public class GameController {
         switch (event.getCode()) {
           case UP:
             accelerate = true;
-            System.out.println("UP pressed");
             break;
           case LEFT:
             steerLeft = true;
@@ -81,8 +93,10 @@ public class GameController {
             break;
           case P:
             pause();
+            break;
           case R:
             reset();
+            break;
         }
       }
     });   //end keyPressed
@@ -93,7 +107,6 @@ public class GameController {
         switch (event.getCode()) {
           case UP:
             accelerate = false;
-            System.out.println("UP released");
             break;
           case LEFT:
             steerLeft = false;
@@ -107,8 +120,5 @@ public class GameController {
         }
       }
     });   //end keyReleased
-
-
   }     //end event handler
-
 }
