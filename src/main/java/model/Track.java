@@ -44,7 +44,7 @@ public class Track {
       for (Obstacle obstacle : obstacles) {
         Vector2D distance = new Vector2D();
         double dist = distance.distance(obstacle.getPosition(), helper.getPosition());
-        if (dist < Settings.OBSTACLERADIUS) {
+        if (dist <= Settings.meterToPixel(Settings.CARHEIGHT + 5)) {
           tooClose = true;
         }
       }
@@ -64,7 +64,6 @@ public class Track {
       System.out.println(
           "Guess (" + position.getX() + " | " + position.getY() + " is " + isOnTrack(position));
       if (isOnTrack(position)) {
-
         System.out.println("found an obstacle");
         return new Obstacle(position, Settings.OBSTACLERADIUS);
       } else {

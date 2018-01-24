@@ -43,11 +43,11 @@ public class Car {
   }
 
   public void brake(double brakeValue) {
-    if (velocity <= Settings.MAXSPEED * -1) {
-      velocity = Settings.MAXSPEED * -1;
-    } else {
-      velocity += brakeValue;
-    }
+    velocity += brakeValue;
+  }
+
+  public boolean isMoving() {
+    return velocity != 0;
   }
 
   public void moveCar(double delta) {
@@ -60,7 +60,7 @@ public class Car {
   }
 
   public void resetDirection() {
-    direction.setX(Settings.INITIALDIRECTION.getX());
+    direction.setX(-1);
     direction.setY(0);
   }
 

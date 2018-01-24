@@ -11,9 +11,10 @@ public class GameController {
   private GameView gameView;
   private GameModel gameModel;
   private Scene scene;
-  private boolean accelerate, steerLeft, steerRight, brake, pause;
+  private boolean accelerate, steerLeft, steerRight, brake, pause, infoMode, help;
   private int counter;
   private double timeBuffer;
+  private long output;
 
   public GameController(GameModel gameModel, GameView gameView) {
     this.gameView = gameView;
@@ -34,10 +35,13 @@ public class GameController {
 
 
   private void renderGameView(double delta) {
+    gameView.setView(true, infoMode);
     counter++;
     timeBuffer += delta;
-    if(counter == 60){
-      System.out.println("FPS: " + timeBuffer*60);
+    if (counter == 60) {
+      if (infoMode) {
+        output = Math.round(timeBuffer * 60);
+      }
       counter = 0;
       timeBuffer = 0;
     }
@@ -46,6 +50,14 @@ public class GameController {
     gameView.renderCar(gameModel.getCarPosition(), gameModel.getCarAngle());
     if (pause) {
       gameView.showPause();
+    }
+    if (infoMode) {
+      gameView.updateInfo(output, gameModel.getCarPosition(), gameModel.getCar().getVelocity(),
+          gameModel.getCar().getAngle());
+    }
+    if (help) {
+      gameView.showHelp();
+      pause = true;
     }
   }
 
@@ -57,6 +69,11 @@ public class GameController {
     }
   }
 
+  private void toggleInfo() {
+    infoMode = !infoMode;
+    System.out.println("info mode: " + infoMode);
+  }
+
 
   private void reset() {
     gameModel.resetCar();
@@ -64,7 +81,7 @@ public class GameController {
 
 
   /**
-   * Pause mode: TODO
+   * Pause mode
    */
   private void pause() {
     if (!pause) {
@@ -75,6 +92,18 @@ public class GameController {
       pause = false;
     }
   }
+
+  private void helpMenu(){
+    if(help){
+      gameView.showHelp();
+      help = false;
+    } else {
+      gameView.removeHelp();
+      help = true;
+    }
+
+  }
+
 
 
   /**
@@ -98,11 +127,19 @@ public class GameController {
           case DOWN:
             brake = true;
             break;
+          case SPACE:
+            brake = true;
+            break;
           case P:
             pause();
             break;
           case R:
             reset();
+            break;
+          case I:
+            toggleInfo();
+            break;
+          case H:
             break;
         }
       }
@@ -122,6 +159,9 @@ public class GameController {
             steerRight = false;
             break;
           case DOWN:
+            brake = false;
+            break;
+          case SPACE:
             brake = false;
             break;
         }

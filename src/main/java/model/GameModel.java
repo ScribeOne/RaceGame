@@ -68,7 +68,11 @@ public class GameModel {
       car.accelerateCar(Settings.ACCELERATIONVALUE);
     }
     if (brake) {
-      car.brake(Settings.BRAKEVALUE);
+      if (car.isMoving()) {
+        car.brake(Settings.BRAKEVALUE);
+      } else {
+        car.accelerateCar(Settings.BRAKEVALUE);
+      }
     }
     if (steerRight) {
       car.steerRight();
@@ -112,6 +116,10 @@ public class GameModel {
 
   public Track getTrack() {
     return track;
+  }
+
+  public Car getCar() {
+    return car;
   }
 
   public Vector2D getCarPosition() {
