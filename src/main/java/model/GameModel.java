@@ -65,14 +65,10 @@ public class GameModel {
    */
   public void updateCar(double delta) {
     if (accelerate) {
-      car.accelerateCar(Settings.ACCELERATIONVALUE);
+      car.accelerateCar(delta);
     }
     if (brake) {
-      if (car.isMoving()) {
-        car.brake(Settings.BRAKEVALUE);
-      } else {
-        car.accelerateCar(Settings.BRAKEVALUE);
-      }
+      car.brake(delta);
     }
     if (steerRight) {
       car.steerRight();

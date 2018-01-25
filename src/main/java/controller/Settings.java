@@ -42,8 +42,8 @@ public class Settings {
   public static final String CARPATH = "/raceCarBlue.png";
 
   // acceleration and brake values
-  public static final double ACCELERATIONVALUE = 2;
-  public static final double BRAKEVALUE = -2;
+  public static final double ACCELERATIONVALUE = 40;
+  public static final double BRAKEVALUE = -55;
 
   // maximum speed of the car
   public static final double MAXSPEED = 200;
@@ -52,6 +52,10 @@ public class Settings {
   public static final double AIRDENSITY = 1.2041;
   public static final double CARSURFACE = 2.19;
   public static final double AIRFACTOR = 0.28;
+
+  //Surface Resistance
+  public static final double CONCRETERESISTANCE = 0.015;
+  public static final double OFFROADRESISTANCE = 0.05;
 
   //Obstacle Settings
   public static final double OBSTACLERADIUS = 20;

@@ -34,16 +34,22 @@ public class Car {
     direction.rotate(-0.03);
   }
 
-  public void accelerateCar(double value) {
+  public void accelerateCar(double delta) {
     if (velocity >= Settings.MAXSPEED) {
       velocity = Settings.MAXSPEED;
     } else {
-      velocity += value;
+      velocity += Settings.ACCELERATIONVALUE * delta;
     }
   }
 
-  public void brake(double brakeValue) {
-    velocity += brakeValue;
+  public void brake(double delta) {
+    if (velocity < Settings.MAXSPEED * -1) {
+      velocity = Settings.MAXSPEED * -1;
+    } else if (velocity > 0) {
+      velocity += Settings.BRAKEVALUE * delta;
+    } else {
+      velocity -= Settings.ACCELERATIONVALUE * delta;
+    }
   }
 
   public boolean isMoving() {
