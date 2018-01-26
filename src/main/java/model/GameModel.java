@@ -25,8 +25,17 @@ public class GameModel {
   }
 
 
-  private void calculateResistance() {
-
+  private void carFriction() {
+    if (track.isOnTrack(car.getPosition())) {
+      double newVelocity = car.getVelocity() - car.getVelocity() * Settings.CONCRETERESISTANCE;
+      car.setVelocity(newVelocity);
+    } else {
+      double newVelocity = car.getVelocity() - car.getVelocity() * Settings.OFFROADRESISTANCE;
+      car.setVelocity(newVelocity);
+    }
+    if (car.getVelocity() < 0.5) {
+      car.setVelocity(0);
+    }
   }
 
   private double calculateAirResistance() {
@@ -59,13 +68,14 @@ public class GameModel {
   }
 
   /**
-   * update vectors of the car accodring to the pressed keys in the current timeframe.
+   * update attributes of the car according to the pressed keys in the current timeframe.
    *
    * @param delta elapsed time for calculations
    */
   public void updateCar(double delta) {
+    carFriction();
     if (accelerate) {
-      car.accelerateCar(delta);
+      car.accelerate(delta);
     }
     if (brake) {
       car.brake(delta);

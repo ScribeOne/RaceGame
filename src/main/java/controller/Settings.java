@@ -42,7 +42,7 @@ public class Settings {
   public static final String CARPATH = "/raceCarBlue.png";
 
   // acceleration and brake values
-  public static final double ACCELERATIONVALUE = 40;
+  public static final double ACCELERATIONVALUE = 200;
   public static final double BRAKEVALUE = -55;
 
   // maximum speed of the car

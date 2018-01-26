@@ -11,7 +11,7 @@ public class GameController {
   private GameView gameView;
   private GameModel gameModel;
   private Scene scene;
-  private boolean accelerate, steerLeft, steerRight, brake, pause, infoMode, help;
+  private boolean accelerate, steerLeft, steerRight, brake, pause, infoMode, help, menu;
   private int counter;
   private double timeBuffer;
   private long output;
@@ -21,6 +21,7 @@ public class GameController {
     this.gameModel = gameModel;
     this.scene = gameView.getScene();
     setUpInputHandler();
+    menu = true;
   }
 
   /**
@@ -35,12 +36,12 @@ public class GameController {
 
 
   private void renderGameView(double delta) {
-    gameView.setView(true, infoMode);
+    gameView.setView(menu, infoMode);
     counter++;
     timeBuffer += delta;
     if (counter == 60) {
       if (infoMode) {
-        output = Math.round(timeBuffer * 60);
+        output = Math.round(timeBuffer*60);
       }
       counter = 0;
       timeBuffer = 0;
@@ -53,7 +54,7 @@ public class GameController {
     }
     if (infoMode) {
       gameView.updateInfo(output, gameModel.getCarPosition(), gameModel.getCar().getVelocity(),
-          gameModel.getCar().getAngle());
+          gameModel.getCar().getAngle(),gameModel.getTrack().isOnTrack(gameModel.getCarPosition()));
     }
     if (help) {
       gameView.showHelp();

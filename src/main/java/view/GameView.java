@@ -1,10 +1,13 @@
 package view;
 
 import controller.Settings;
+import java.util.Set;
+import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
@@ -37,10 +40,10 @@ public class GameView {
   //Stackpane where all dialogues are stacked up.
   private StackPane rootPane;
 
-  private Pane gamePane, infoPane, helpPane;
+  private Pane gamePane, infoPane, helpPane, menuPane;
 
-  private Label fps, carPos, velo, dir, stuff;
-  private boolean infoShown, helpShown;
+  private Label fps, carPos, velo, dir, tracker;
+  private boolean infoShown, helpShown, menuShown;
 
   public Scene getScene() {
     return scene;
@@ -60,16 +63,49 @@ public class GameView {
     setUpGameWindow();
     initializeInfoPane();
     initializeHelpPane();
+    setMainMenu();
     stage.setScene(scene);
   }
 
-  public void setView(boolean showGame, boolean showInfo) {
+  private void setMainMenu() {
+    menuPane = new Pane();
+    menuPane.setPrefSize(Settings.WIDTH, Settings.HEIGHT);
+    VBox menuBox = new VBox();
+    menuBox.setPrefSize(Settings.WIDTH, Settings.HEIGHT);
+    menuBox.setAlignment(Pos.CENTER);
+    Button startButton = new Button();
+    startButton.setPrefSize(150, 75);
+    startButton.setText("Start Game");
+    menuBox.getChildren().addAll(startButton);
+    menuPane.getChildren().add(menuBox);
+  }
+
+  private void showMenu() {
+    if (!menuShown) {
+      rootPane.getChildren().add(menuPane);
+      menuShown = true;
+    }
+  }
+
+  private void removeMenu() {
+    if (menuShown) {
+      rootPane.getChildren().remove(menuPane);
+      menuShown = false;
+    }
+  }
+
+  public void setView(boolean showMenu, boolean showInfo) {
     if (showInfo && !infoShown) {
       rootPane.getChildren().add(infoPane);
       infoShown = true;
     } else if (!showInfo && infoShown) {
       rootPane.getChildren().remove(infoPane);
       infoShown = false;
+    }
+    if (showMenu) {
+      showMenu();
+    } else if (!showMenu && menuShown) {
+      removeMenu();
     }
   }
 
@@ -136,23 +172,25 @@ public class GameView {
     dir.setPrefSize(250, 10);
     dir.setText("Direction: ");
     dir.setTextFill(Settings.INFOCOLOR);
-    stuff = new Label();
-    stuff.setPrefSize(250, 10);
-    stuff.setText("Stuff: ");
-    stuff.setTextFill(Settings.INFOCOLOR);
-    infoBox.getChildren().addAll(fps, carPos, velo, dir, stuff);
+    tracker = new Label();
+    tracker.setPrefSize(250, 10);
+    tracker.setText("Car is on track: ");
+    tracker.setTextFill(Settings.INFOCOLOR);
+    infoBox.getChildren().addAll(fps, carPos, velo, dir, tracker);
     infoPane.getChildren().add(infoBox);
   }
 
   /**
    * update Infobox labels with information from the model.
    */
-  public void updateInfo(long fps, Vector2D position, double velocity, double direction) {
+  public void updateInfo(long fps, Vector2D position, double velocity, double direction,
+      boolean carOnTrack) {
     this.fps.setText("FPS: " + fps);
     carPos.setText(
         "Position: [" + Math.round(position.getX()) + " | " + Math.round(position.getY()) + "]");
     velo.setText("Velocity: " + velocity + " pixel/sec");
     dir.setText("Direction: " + Math.round(direction) + "°");
+    tracker.setText("Car is on track: " + carOnTrack);
   }
 
 
