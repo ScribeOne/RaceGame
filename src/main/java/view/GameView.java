@@ -1,7 +1,6 @@
 package view;
 
 import controller.Settings;
-import java.util.Set;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
@@ -21,7 +20,6 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
-import model.Car;
 import model.Obstacle;
 import model.Track;
 import model.Vector2D;
@@ -36,6 +34,7 @@ public class GameView {
   private GraphicsContext gc;
 
   private Scene scene;
+  private Stage stage;
 
   //Stackpane where all dialogues are stacked up.
   private StackPane rootPane;
@@ -44,6 +43,7 @@ public class GameView {
 
   private Label fps, carPos, velo, dir, tracker;
   private boolean infoShown, helpShown, menuShown;
+  private Button startButton, exitButton;
 
   public Scene getScene() {
     return scene;
@@ -55,6 +55,7 @@ public class GameView {
    * @param stage the primary stage
    */
   public GameView(Stage stage) {
+    this.stage = stage;
     stage.setTitle("Race Game v1.0");
     stage.setResizable(false);
     stage.sizeToScene();
@@ -65,19 +66,55 @@ public class GameView {
     initializeHelpPane();
     setMainMenu();
     stage.setScene(scene);
+
   }
 
   private void setMainMenu() {
     menuPane = new Pane();
     menuPane.setPrefSize(Settings.WIDTH, Settings.HEIGHT);
-    VBox menuBox = new VBox();
+    Rectangle menuBackground = new Rectangle();
+    menuBackground.setHeight(Settings.HEIGHT);
+    menuBackground.setWidth(Settings.WIDTH);
+    menuBackground.setFill(Color.BLACK);
+    VBox menuBox = new VBox(15);
     menuBox.setPrefSize(Settings.WIDTH, Settings.HEIGHT);
     menuBox.setAlignment(Pos.CENTER);
-    Button startButton = new Button();
-    startButton.setPrefSize(150, 75);
+    startButton = new Button();
+    startButton.setPrefSize(200, 35);
     startButton.setText("Start Game");
-    menuBox.getChildren().addAll(startButton);
-    menuPane.getChildren().add(menuBox);
+    exitButton = new Button();
+    exitButton.setPrefSize(200, 35);
+    exitButton.setText("Exit");
+   /* startButton.setStyle(
+        "-fx-background-color: linear-gradient(from 0% 93% to 0% 100%, #a34313 0%, #903b12 100%),"
+            + "  #9d4024, "
+            + " #d86e3a, "
+            + "radial-gradient(center 50% 50%, radius 100%, #d86e3a, #c54e2c )";
+            + "-fx-effect: dropshadow( gaussian , rgba(0,0,0,0.75) , 4,0,0,1 )");
+
+    exitButton.setStyle(
+        "-fx-background-color: linear-gradient(from 0% 93% to 0% 100%, #a34313 0%, #903b12 100%),"
+            + "  #9d4024, "
+            + " #d86e3a, "
+            + "radial-gradient(center 50% 50%, radius 100%, #d86e3a, #c54e2c )");
+    */
+
+    menuBox.getChildren().addAll(startButton, exitButton);
+
+    menuPane.getChildren().addAll(menuBackground, menuBox);
+  }
+
+
+  public Button getStartButton() {
+    return startButton;
+  }
+
+  public Button getExitButton() {
+    return exitButton;
+  }
+
+  public Stage getStage() {
+    return stage;
   }
 
   private void showMenu() {
@@ -269,7 +306,4 @@ public class GameView {
     }
   }
 
-  public void showInfo(Car car, Track track, double delta) {
-
-  }
 }

@@ -1,5 +1,6 @@
 package model;
 
+
 import controller.Settings;
 
 /**
@@ -25,24 +26,34 @@ public class GameModel {
   }
 
 
-  private void carFriction() {
-    if (track.isOnTrack(car.getPosition())) {
-      double newVelocity = car.getVelocity() - car.getVelocity() * Settings.CONCRETERESISTANCE;
-      car.setVelocity(newVelocity);
+  private void setNewVelocity(double delta) {
+    double allForces = 0;
+    if (accelerate) {
+      allForces = Settings.engineForce - getForces() * delta;
     } else {
-      double newVelocity = car.getVelocity() - car.getVelocity() * Settings.OFFROADRESISTANCE;
-      car.setVelocity(newVelocity);
+      allForces = -getForces() * delta;
     }
-    if (car.getVelocity() < 0.5) {
-      car.setVelocity(0);
+    //System.out.println("force: " + allForces);
+    car.setVelocity(car.getVelocity() + allForces);
+  }
+
+  private double getForces() {
+    return carFriction() + airResistance() / Settings.carWeigth;
+  }
+
+  private double carFriction() {
+    if (track.isOnTrack(car.getPosition())) {
+      return Settings.CONCRETERESISTANCE * Settings.normalForce;
+    } else {
+      return Settings.OFFROADRESISTANCE * Settings.normalForce;
     }
   }
 
-  private double calculateAirResistance() {
-    return Settings.AIRFACTOR * Settings.CARSURFACE * (Settings.AIRDENSITY / 2) * car.getVelocity()
+  private double airResistance() {
+    return Settings.AIRFACTOR * Settings.CARSURFACE * (Settings.AIRDENSITY * (1 / 2)) * car
+        .getVelocity()
         * car.getVelocity();
   }
-
 
   /**
    * Update the car control flags according to the key events for the current timeframe. Game controller should handle key events.
@@ -56,27 +67,12 @@ public class GameModel {
   }
 
   /**
-   * Initialize the Track with default values in the Settings
-   *
-   * @return initialized track
-   */
-  private Track initializeTrack() {
-    track = new Track(Settings.meterToPixel(Settings.INNERRADIUSX),
-        Settings.meterToPixel(Settings.INNERRADIUSY),
-        Settings.meterToPixel(Settings.OUTERRADIUSX), Settings.meterToPixel(Settings.OUTERRADIUSY));
-    return track;
-  }
-
-  /**
    * update attributes of the car according to the pressed keys in the current timeframe.
    *
    * @param delta elapsed time for calculations
    */
   public void updateCar(double delta) {
-    carFriction();
-    if (accelerate) {
-      car.accelerate(delta);
-    }
+    setNewVelocity(delta);
     if (brake) {
       car.brake(delta);
     }
@@ -89,7 +85,6 @@ public class GameModel {
     car.moveCar(delta);
   }
 
-
   /**
    * Initializes a car with the initial values
    *
@@ -98,7 +93,23 @@ public class GameModel {
   private Car initializeCar() {
     //initialize a new car and give it the init values set in the static variables
     car = new Car(Settings.initialPosition, Settings.INITIALDIRECTION);
+    car.setPosition(Settings.initialPosition);
+    car.resetDirection();
+    car.setVelocity(0);
     return car;
+  }
+
+  /**
+   * Initialize the Track with default values in the Settings
+   *
+   * @return initialized track
+   */
+  private Track initializeTrack() {
+    track = new Track(Settings.meterToPixel(Settings.INNERRADIUSX),
+        Settings.meterToPixel(Settings.INNERRADIUSY),
+        Settings.meterToPixel(Settings.OUTERRADIUSX),
+        Settings.meterToPixel(Settings.OUTERRADIUSY));
+    return track;
   }
 
   /**

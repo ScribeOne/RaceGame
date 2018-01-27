@@ -39,14 +39,19 @@ public class Settings {
   public static final Vector2D ZERODEGREES = new Vector2D(1, 0);
 
   //Path to the car image
-  public static final String CARPATH = "/raceCarBlue.png";
+  public static final String CARPATH = "/images/raceCarBlue.png";
 
   // acceleration and brake values
   public static final double ACCELERATIONVALUE = 200;
   public static final double BRAKEVALUE = -55;
 
+  // Physic values
+  public static final double normalForce = 9.81;
+  public static final double engineForce = 20;
+
   // maximum speed of the car
   public static final double MAXSPEED = 200;
+  public static final double carWeigth = 12500;
 
   // Air Resistance Settings
   public static final double AIRDENSITY = 1.2041;
