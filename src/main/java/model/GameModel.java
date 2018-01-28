@@ -33,8 +33,13 @@ public class GameModel {
     } else {
       allForces = -getForces() * delta;
     }
+    double newVelocity = car.getVelocity() + allForces;
     //System.out.println("force: " + allForces);
-    car.setVelocity(car.getVelocity() + allForces);
+    if (newVelocity > Settings.MAXSPEED) {
+      car.setVelocity(Settings.MAXSPEED);
+    } else {
+      car.setVelocity(car.getVelocity() + allForces);
+    }
   }
 
   private double getForces() {

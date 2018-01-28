@@ -14,7 +14,7 @@ public class Settings {
 
   //Colors
   public static final Color STREETCOLOR = Color.rgb(25, 25, 25);
-  public static final Color BACKGROUND = Color.rgb(0, 51, 0);
+  public static final Color BACKGROUND = Color.rgb(155, 118, 83);
   public static final Color OBSTACLECOLOR = Color.rgb(109, 9, 9);
   public static final Color PAUSECOLOR = Color.rgb(0, 0, 0, 0.5);
   public static final Color INFOCOLOR = Color.rgb(0, 0, 0);
@@ -39,7 +39,10 @@ public class Settings {
   public static final Vector2D ZERODEGREES = new Vector2D(1, 0);
 
   //Path to the car image
-  public static final String CARPATH = "/images/raceCarBlue.png";
+  public static final String CARPATH = "/images/raceCarOrange.png";
+
+  //Path to css Files
+  public static final String MENUCSS = "/css/menu.css";
 
   // acceleration and brake values
   public static final double ACCELERATIONVALUE = 200;
@@ -47,7 +50,7 @@ public class Settings {
 
   // Physic values
   public static final double normalForce = 9.81;
-  public static final double engineForce = 20;
+  public static final double engineForce = 2;
 
   // maximum speed of the car
   public static final double MAXSPEED = 200;
@@ -64,7 +67,7 @@ public class Settings {
 
   //Obstacle Settings
   public static final double OBSTACLERADIUS = 20;
-  public static final int OBSTACLEAMOUNT = 20;
+  public static final int OBSTACLEAMOUNT = 30;
 
   //Methods to convert Pixel <-> Meter
   static public double meterToPixel(double input) {

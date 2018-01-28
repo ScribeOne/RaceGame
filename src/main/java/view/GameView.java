@@ -29,25 +29,16 @@ import model.Vector2D;
  */
 public class GameView {
 
-  //Canvas and its GraphicsContext where all objects are drawn.
   private Canvas gameCanvas;
   private GraphicsContext gc;
-
   private Scene scene;
   private Stage stage;
-
-  //Stackpane where all dialogues are stacked up.
   private StackPane rootPane;
-
   private Pane gamePane, infoPane, helpPane, menuPane;
-
   private Label fps, carPos, velo, dir, tracker;
   private boolean infoShown, helpShown, menuShown;
   private Button startButton, exitButton;
 
-  public Scene getScene() {
-    return scene;
-  }
 
   /**
    * GameView object for setting up the GUI
@@ -55,27 +46,36 @@ public class GameView {
    * @param stage the primary stage
    */
   public GameView(Stage stage) {
+    // set stage
     this.stage = stage;
-    stage.setTitle("Race Game v1.0");
+    stage.setTitle("Race Game v1.1");
     stage.setResizable(false);
     stage.sizeToScene();
+
+    // create Stackpane and add to scene
     rootPane = new StackPane();
     scene = new Scene(rootPane, Settings.WIDTH, Settings.HEIGHT);
-    setUpGameWindow();
-    initializeInfoPane();
-    initializeHelpPane();
-    setMainMenu();
-    stage.setScene(scene);
 
+    // create all content panes that get stacked up on the root pane
+    setUpGamePane();
+    setUpInfoPane();
+    setUpHelpPane();
+    setUpMenuPane();
+
+    //Set css for the different Panes
+    gamePane.getStylesheets().add("/css/game.css");
+    menuPane.getStylesheets().add(Settings.MENUCSS);
+
+    menuPane.getStyleClass().add("background");
+
+    //set scene to stage
+    stage.setScene(scene);
   }
 
-  private void setMainMenu() {
+
+  private void setUpMenuPane() {
     menuPane = new Pane();
     menuPane.setPrefSize(Settings.WIDTH, Settings.HEIGHT);
-    Rectangle menuBackground = new Rectangle();
-    menuBackground.setHeight(Settings.HEIGHT);
-    menuBackground.setWidth(Settings.WIDTH);
-    menuBackground.setFill(Color.BLACK);
     VBox menuBox = new VBox(15);
     menuBox.setPrefSize(Settings.WIDTH, Settings.HEIGHT);
     menuBox.setAlignment(Pos.CENTER);
@@ -85,86 +85,14 @@ public class GameView {
     exitButton = new Button();
     exitButton.setPrefSize(200, 35);
     exitButton.setText("Exit");
-   /* startButton.setStyle(
-        "-fx-background-color: linear-gradient(from 0% 93% to 0% 100%, #a34313 0%, #903b12 100%),"
-            + "  #9d4024, "
-            + " #d86e3a, "
-            + "radial-gradient(center 50% 50%, radius 100%, #d86e3a, #c54e2c )";
-            + "-fx-effect: dropshadow( gaussian , rgba(0,0,0,0.75) , 4,0,0,1 )");
-
-    exitButton.setStyle(
-        "-fx-background-color: linear-gradient(from 0% 93% to 0% 100%, #a34313 0%, #903b12 100%),"
-            + "  #9d4024, "
-            + " #d86e3a, "
-            + "radial-gradient(center 50% 50%, radius 100%, #d86e3a, #c54e2c )");
-    */
-
+    startButton.getStyleClass().add("menu-button");
+    exitButton.getStyleClass().add("menu-button");
     menuBox.getChildren().addAll(startButton, exitButton);
-
-    menuPane.getChildren().addAll(menuBackground, menuBox);
+    menuPane.getChildren().addAll(menuBox);
   }
 
 
-  public Button getStartButton() {
-    return startButton;
-  }
-
-  public Button getExitButton() {
-    return exitButton;
-  }
-
-  public Stage getStage() {
-    return stage;
-  }
-
-  private void showMenu() {
-    if (!menuShown) {
-      rootPane.getChildren().add(menuPane);
-      menuShown = true;
-    }
-  }
-
-  private void removeMenu() {
-    if (menuShown) {
-      rootPane.getChildren().remove(menuPane);
-      menuShown = false;
-    }
-  }
-
-  public void setView(boolean showMenu, boolean showInfo) {
-    if (showInfo && !infoShown) {
-      rootPane.getChildren().add(infoPane);
-      infoShown = true;
-    } else if (!showInfo && infoShown) {
-      rootPane.getChildren().remove(infoPane);
-      infoShown = false;
-    }
-    if (showMenu) {
-      showMenu();
-    } else if (!showMenu && menuShown) {
-      removeMenu();
-    }
-  }
-
-  public void clear() {
-    gc.clearRect(0, 0, Settings.WIDTH, Settings.HEIGHT);
-  }
-
-  public void showHelp() {
-    if (!helpShown) {
-      rootPane.getChildren().add(helpPane);
-      helpShown = true;
-    }
-  }
-
-  public void removeHelp() {
-    if (helpShown) {
-      rootPane.getChildren().remove(helpPane);
-      helpShown = false;
-    }
-  }
-
-  private void initializeHelpPane() {
+  private void setUpHelpPane() {
     helpPane = new Pane();
     Rectangle helpWindow = new Rectangle(500, 500);
     helpWindow.setLayoutX(200);
@@ -174,10 +102,9 @@ public class GameView {
 
 
   /**
-   * Sets up the main game window with the course as panebackground,
-   * the car in the initial Position
+   * Sets up the main game window, create Canvas and its GraphicsContext.
    */
-  private void setUpGameWindow() {
+  private void setUpGamePane() {
     gamePane = new Pane();
     gameCanvas = new Canvas(Settings.WIDTH, Settings.HEIGHT);
     gamePane.getChildren().addAll(gameCanvas);
@@ -188,7 +115,7 @@ public class GameView {
   /**
    * create InfoBox with all labels and add it to the stackpane.
    */
-  private void initializeInfoPane() {
+  private void setUpInfoPane() {
     infoPane = new Pane();
     VBox infoBox = new VBox();
     infoBox.setPrefWidth(250);
@@ -253,7 +180,6 @@ public class GameView {
    * draw the car at its current position.
    */
   public void renderCar(Vector2D position, double newAngle) {
-
     Image blueCar = new Image(Settings.CARPATH);
     double pivotX = (position.getX() + Settings.meterToPixel(Settings.CARWIDTH) / 2);
     double pivotY = (position.getY() + Settings.meterToPixel(Settings.CARHEIGHT) / 2);
@@ -272,6 +198,7 @@ public class GameView {
   public void renderTrack(Track track) {
 
     //Background
+
     gc.setFill(Settings.BACKGROUND);
     gc.fillRect(0, 0, Settings.WIDTH, Settings.HEIGHT);
 
@@ -291,8 +218,27 @@ public class GameView {
     gc.fillOval(innerCornerX, innerCornerY, track.getInnerRadiusX() * 2,
         track.getInnerRadiusY() * 2);
 
-    //border of the track
+    // Finish and Checkpoint
+    gc.setLineDashes(8);
+    gc.setLineWidth(6);
     gc.setStroke(Color.WHITE);
+    gc.strokeLine(track.getFinishUp().getX(), track.getFinishUp().getY(),
+        track.getFinishDown().getX(), track.getFinishDown().getY());
+    gc.strokeLine(track.getCheckpointUp().getX(), track.getCheckpointUp().getY(),
+        track.getCheckPointDown().getX(), track.getCheckPointDown().getY());
+
+    //border of the track
+    gc.setStroke(Color.RED);
+    gc.setLineWidth(2);
+    gc.setLineDashes(0);
+    gc.strokeOval(outerCornerX, outerCornerY, track.getOuterRadiusX() * 2,
+        track.getOuterRadiusY() * 2);
+    gc.strokeOval(innerCornerX, innerCornerY, track.getInnerRadiusX() * 2,
+        track.getInnerRadiusY() * 2);
+
+    gc.setStroke(Color.WHITE);
+    gc.setLineWidth(2);
+    gc.setLineDashes(20);
     gc.strokeOval(outerCornerX, outerCornerY, track.getOuterRadiusX() * 2,
         track.getOuterRadiusY() * 2);
     gc.strokeOval(innerCornerX, innerCornerY, track.getInnerRadiusX() * 2,
@@ -304,6 +250,72 @@ public class GameView {
       gc.fillOval(obstacle.getPosition().getX(), obstacle.getPosition().getY(),
           obstacle.getRadius(), obstacle.getRadius());
     }
+
+
   }
 
+  private void showMenu() {
+    if (!menuShown) {
+      rootPane.getChildren().add(menuPane);
+      menuShown = true;
+    }
+  }
+
+  private void removeMenu() {
+    if (menuShown) {
+      rootPane.getChildren().remove(menuPane);
+      menuShown = false;
+    }
+  }
+
+  public void setView(boolean showMenu, boolean showInfo) {
+    if (showInfo && !infoShown) {
+      rootPane.getChildren().add(infoPane);
+      infoShown = true;
+    } else if (!showInfo && infoShown) {
+      rootPane.getChildren().remove(infoPane);
+      infoShown = false;
+    }
+    if (showMenu) {
+      showMenu();
+    } else if (!showMenu && menuShown) {
+      removeMenu();
+    }
+  }
+
+  public void clear() {
+    gc.clearRect(0, 0, Settings.WIDTH, Settings.HEIGHT);
+  }
+
+  public void showHelp() {
+    if (!helpShown) {
+      rootPane.getChildren().add(helpPane);
+      helpShown = true;
+    }
+  }
+
+  public void removeHelp() {
+    if (helpShown) {
+      rootPane.getChildren().remove(helpPane);
+      helpShown = false;
+    }
+  }
+
+
+  // Getter and Setter
+  public Button getStartButton() {
+    return startButton;
+  }
+
+  public Button getExitButton() {
+    return exitButton;
+  }
+
+  public Stage getStage() {
+    return stage;
+  }
+
+  public Scene getScene() {
+    return scene;
+  }
 }

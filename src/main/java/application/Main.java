@@ -14,7 +14,7 @@ public class Main extends Application {
   private long oldTime;
 
   /**
-   * The main entry point
+   * The main entry point. Starts the Animation Timer.
    */
   @Override
   public void start(Stage primaryStage) throws Exception {

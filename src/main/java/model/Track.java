@@ -11,6 +11,7 @@ public class Track {
 
   private double centerX, centerY, innerRadiusX, innerRadiusY, outerRadiusX, outerRadiusY;
   private LinkedList<Obstacle> obstacles;
+  private Vector2D finishUp, finishDown, checkpointUp, checkPointDown;
 
   /**
    * Constructor with the Radius of the two Ellipses as Parameters.
@@ -24,6 +25,22 @@ public class Track {
     this.outerRadiusX = outerRadiusX;
     this.outerRadiusY = outerRadiusY;
     this.obstacles = new LinkedList<>();
+
+    finishUp = new Vector2D();
+    finishDown = new Vector2D();
+    finishUp.setX(centerX);
+    finishUp.setY(centerY - outerRadiusY);
+    finishDown.setX(centerX);
+    finishDown.setY(centerY - innerRadiusY);
+
+    checkpointUp = new Vector2D();
+    checkPointDown = new Vector2D();
+
+    checkpointUp.setX(centerX);
+    checkpointUp.setY(centerY + outerRadiusY);
+    checkPointDown.setX(centerX);
+    checkPointDown.setY(centerY + innerRadiusY);
+
   }
 
   public boolean isOnTrack(Vector2D position) {
@@ -44,7 +61,7 @@ public class Track {
       for (Obstacle obstacle : obstacles) {
         Vector2D distance = new Vector2D();
         double dist = distance.distance(obstacle.getPosition(), helper.getPosition());
-        if (dist <= Settings.meterToPixel(Settings.CARHEIGHT + 5)) {
+        if (dist <= Settings.meterToPixel(Settings.CARHEIGHT * 2)) {
           tooClose = true;
         }
       }
@@ -140,4 +157,37 @@ public class Track {
   public void setOuterRadiusY(double outerRadiusY) {
     this.outerRadiusY = outerRadiusY;
   }
+
+  public Vector2D getFinishUp() {
+    return finishUp;
+  }
+
+  public void setFinishUp(Vector2D finishUp) {
+    this.finishUp = finishUp;
+  }
+
+  public Vector2D getFinishDown() {
+    return finishDown;
+  }
+
+  public void setFinishDown(Vector2D finishDown) {
+    this.finishDown = finishDown;
+  }
+
+  public Vector2D getCheckpointUp() {
+    return checkpointUp;
+  }
+
+  public void setCheckpointUp(Vector2D checkpointUp) {
+    this.checkpointUp = checkpointUp;
+  }
+
+  public Vector2D getCheckPointDown() {
+    return checkPointDown;
+  }
+
+  public void setCheckPointDown(Vector2D checkPointDown) {
+    this.checkPointDown = checkPointDown;
+  }
 }
+
