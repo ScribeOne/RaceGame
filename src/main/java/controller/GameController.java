@@ -1,7 +1,7 @@
 package controller;
 
 import java.util.Optional;
-import javafx.application.Platform;
+
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -24,7 +24,9 @@ public class GameController {
   private boolean accelerate, steerLeft, steerRight, brake, pause, infoMode, help, menu;
   private int counter;
   private double timeBuffer;
-  private long output;
+  private long fpsTimer;
+  private double min;
+  private double sec;
 
   public GameController(GameModel gameModel, GameView gameView) {
     this.gameView = gameView;
@@ -53,12 +55,15 @@ public class GameController {
     counter++;
     timeBuffer += delta;
     if (counter == 60) {
+        gameView.updateTime(timeBuffer);
       if (infoMode) {
-        output = Math.round(timeBuffer * 60);
+        fpsTimer = Math.round(timeBuffer * 60);
       }
       counter = 0;
       timeBuffer = 0;
     }
+
+
     gameView.clear();
     gameView.renderTrack(gameModel.getTrack());
     gameView.renderCar(gameModel.getCarPosition(), gameModel.getCarAngle());
@@ -66,7 +71,7 @@ public class GameController {
       gameView.showPause();
     }
     if (infoMode) {
-      gameView.updateInfo(output, gameModel.getCarPosition(), gameModel.getCar().getVelocity(),
+      gameView.updateInfo(fpsTimer, gameModel.getCarPosition(), gameModel.getCar().getVelocity(),
           gameModel.getCar().getAngle(),
           gameModel.getTrack().isOnTrack(gameModel.getCarPosition()));
     }
@@ -91,7 +96,8 @@ public class GameController {
 
 
   private void reset() {
-    gameModel.resetCar();
+      gameView.resetTimer();
+      gameModel.resetCar();
   }
 
 
@@ -197,8 +203,10 @@ public class GameController {
         System.out.println("mouse click detected! " + mouseEvent.getSource());
         menu = false;
         reset();
+        gameView.resetTimer();
       }
     });
+
 
     /**
      * Event Handler for the Exit Button. Calls the confirmation alert.

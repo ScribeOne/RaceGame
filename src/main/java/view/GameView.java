@@ -42,6 +42,8 @@ public class GameView {
   private Label fps, carPos, velo, dir, tracker;
   private boolean infoShown, helpShown, menuShown;
   private Button startButton, exitButton;
+  private double time;
+  private int sec, min;
 
 
   /**
@@ -66,9 +68,10 @@ public class GameView {
     setUpHelpPane();
     setUpMenuPane();
 
+
     // load custom font
     Font.loadFont(
-        Main.class.getResource("/style/tagtype-freefont.TTF").toExternalForm(),
+        Main.class.getResource("/style/tagtype-freefont.ttf").toExternalForm(),
         10
     );
 
@@ -79,6 +82,25 @@ public class GameView {
 
     //set scene to stage
     stage.setScene(scene);
+  }
+
+  public void updateTime(double elapsed){
+    time += elapsed;
+    sec = (int) time % 60 ;
+    min = (int) ((time / (60)) % 60);
+    System.out.println(String.format("%02d min, %02d sec",min,sec));
+    gc.setFill(Color.BLACK);
+    gc.setTextAlign(TextAlignment.CENTER);
+    gc.setTextBaseline(VPos.CENTER);
+    gc.setFont(new Font(40));
+    gc.fillText("test",
+            Math.round(Settings.WIDTH / 2),
+            Math.round(Settings.HEIGHT / 2)
+    );
+  }
+
+  public void resetTimer(){
+    time = 0;
   }
 
 
@@ -119,8 +141,6 @@ public class GameView {
     gamePane.getChildren().addAll(gameCanvas);
     gc = gameCanvas.getGraphicsContext2D();
     rootPane.getChildren().add(gamePane);
-
-
   }
 
   /**
@@ -249,7 +269,7 @@ public class GameView {
 
     gc.setStroke(Color.WHITE);
     gc.setLineWidth(2);
-    gc.setLineDashes(20);
+    gc.setLineDashes(30);
     gc.strokeOval(outerCornerX, outerCornerY, track.getOuterRadiusX() * 2,
         track.getOuterRadiusY() * 2);
     gc.strokeOval(innerCornerX, innerCornerY, track.getInnerRadiusX() * 2,
