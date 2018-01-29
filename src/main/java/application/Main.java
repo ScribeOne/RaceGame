@@ -2,6 +2,7 @@ package application;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import controller.GameController;
 import model.GameModel;
@@ -23,6 +24,8 @@ public class Main extends Application {
     GameModel gameModel = new GameModel();
     GameView gameView = new GameView(primaryStage);
     GameController gameController = new GameController(gameModel, gameView);
+
+
 
     oldTime = System.currentTimeMillis();
     System.out.println("current time: " + oldTime);

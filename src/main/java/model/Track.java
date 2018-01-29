@@ -73,6 +73,11 @@ public class Track {
     }
   }
 
+
+  /**
+   * find location for an obstacle.
+   * @return obstacle with possible position
+   * */
   private Obstacle findFittingObstacle() {
     while (true) {
       Vector2D position = new Vector2D();
@@ -106,88 +111,41 @@ public class Track {
   }
 
 
+  // Getter and Setter
   public LinkedList<Obstacle> getObstacles() {
     return obstacles;
-  }
-
-  public double getCenterX() {
-    return centerX;
-  }
-
-  public void setCenterX(double centerX) {
-    this.centerX = centerX;
-  }
-
-  public double getCenterY() {
-    return centerY;
-  }
-
-  public void setCenterY(double centerY) {
-    this.centerY = centerY;
   }
 
   public double getInnerRadiusX() {
     return innerRadiusX;
   }
 
-  public void setInnerRadiusX(double innerRadiusX) {
-    this.innerRadiusX = innerRadiusX;
-  }
-
   public double getInnerRadiusY() {
     return innerRadiusY;
-  }
-
-  public void setInnerRadiusY(double innerRadiusY) {
-    this.innerRadiusY = innerRadiusY;
   }
 
   public double getOuterRadiusX() {
     return outerRadiusX;
   }
 
-  public void setOuterRadiusX(double outerRadiusX) {
-    this.outerRadiusX = outerRadiusX;
-  }
-
   public double getOuterRadiusY() {
     return outerRadiusY;
-  }
-
-  public void setOuterRadiusY(double outerRadiusY) {
-    this.outerRadiusY = outerRadiusY;
   }
 
   public Vector2D getFinishUp() {
     return finishUp;
   }
 
-  public void setFinishUp(Vector2D finishUp) {
-    this.finishUp = finishUp;
-  }
-
   public Vector2D getFinishDown() {
     return finishDown;
-  }
-
-  public void setFinishDown(Vector2D finishDown) {
-    this.finishDown = finishDown;
   }
 
   public Vector2D getCheckpointUp() {
     return checkpointUp;
   }
 
-  public void setCheckpointUp(Vector2D checkpointUp) {
-    this.checkpointUp = checkpointUp;
-  }
-
   public Vector2D getCheckPointDown() {
     return checkPointDown;
-  }
-
-  public void setCheckPointDown(Vector2D checkPointDown) {
-    this.checkPointDown = checkPointDown;
   }
 }
 

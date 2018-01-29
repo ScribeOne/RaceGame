@@ -41,12 +41,12 @@ public class Settings {
   //Path to the car image
   public static final String CARPATH = "/images/raceCarOrange.png";
 
-  //Path to css Files
-  public static final String MENUCSS = "/css/menu.css";
+  //Path to style Files
+  public static final String MENUCSS = "/style/menu.css";
 
   // acceleration and brake values
-  public static final double ACCELERATIONVALUE = 200;
-  public static final double BRAKEVALUE = -55;
+  //public static final double ACCELERATIONVALUE = 200;
+  public static final double BRAKEVALUE = -80;
 
   // Physic values
   public static final double normalForce = 9.81;
@@ -66,8 +66,8 @@ public class Settings {
   public static final double OFFROADRESISTANCE = 0.05;
 
   //Obstacle Settings
-  public static final double OBSTACLERADIUS = 20;
-  public static final int OBSTACLEAMOUNT = 30;
+  public static final double OBSTACLERADIUS = 25;
+  public static final int OBSTACLEAMOUNT = 20;
 
   //Methods to convert Pixel <-> Meter
   static public double meterToPixel(double input) {

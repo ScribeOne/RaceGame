@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.Optional;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -158,6 +159,8 @@ public class GameController {
             break;
           case H:
             break;
+          case ESCAPE:
+            stage.close();
         }
       }
     });   //end keyPressed

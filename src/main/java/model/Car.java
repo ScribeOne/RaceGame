@@ -34,13 +34,7 @@ public class Car {
     direction.rotate(-0.03);
   }
 
-  public void accelerate(double delta) {
-    if (velocity >= Settings.MAXSPEED) {
-      velocity = Settings.MAXSPEED;
-    } else {
-      velocity += Settings.ACCELERATIONVALUE * delta;
-    }
-  }
+
 
   public void brake(double delta) {
     if (velocity < Settings.MAXSPEED * -1) {
@@ -48,7 +42,7 @@ public class Car {
     } else if (velocity > 0) {
       velocity += Settings.BRAKEVALUE * delta;
     } else {
-      velocity -= Settings.ACCELERATIONVALUE * delta;
+      velocity += Settings.BRAKEVALUE * delta;
     }
   }
 

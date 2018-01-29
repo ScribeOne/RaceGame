@@ -1,6 +1,10 @@
 package view;
 
+import application.Main;
 import controller.Settings;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
@@ -62,8 +66,13 @@ public class GameView {
     setUpHelpPane();
     setUpMenuPane();
 
-    //Set css for the different Panes
-    gamePane.getStylesheets().add("/css/game.css");
+    // load custom font
+    Font.loadFont(
+        Main.class.getResource("/style/tagtype-freefont.TTF").toExternalForm(),
+        10
+    );
+
+    //Set style for the different Panes
     menuPane.getStylesheets().add(Settings.MENUCSS);
 
     menuPane.getStyleClass().add("background");
@@ -76,15 +85,15 @@ public class GameView {
   private void setUpMenuPane() {
     menuPane = new Pane();
     menuPane.setPrefSize(Settings.WIDTH, Settings.HEIGHT);
-    VBox menuBox = new VBox(15);
-    menuBox.setPrefSize(Settings.WIDTH, Settings.HEIGHT);
+    VBox menuBox = new VBox(20);
+    menuBox.setPrefSize(Settings.WIDTH, Settings.HEIGHT - 150);
     menuBox.setAlignment(Pos.CENTER);
     startButton = new Button();
-    startButton.setPrefSize(200, 35);
-    startButton.setText("Start Game");
+    startButton.setPrefSize(250, 25);
+    startButton.setText("START GAME");
     exitButton = new Button();
-    exitButton.setPrefSize(200, 35);
-    exitButton.setText("Exit");
+    exitButton.setPrefSize(250, 25);
+    exitButton.setText("EXIT");
     startButton.getStyleClass().add("menu-button");
     exitButton.getStyleClass().add("menu-button");
     menuBox.getChildren().addAll(startButton, exitButton);
@@ -110,6 +119,8 @@ public class GameView {
     gamePane.getChildren().addAll(gameCanvas);
     gc = gameCanvas.getGraphicsContext2D();
     rootPane.getChildren().add(gamePane);
+
+
   }
 
   /**
