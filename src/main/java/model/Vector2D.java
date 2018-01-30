@@ -44,8 +44,8 @@ public class Vector2D {
    * Calculate the distance of two Vectors with euclidean distance algorithm.
    */
   public double distance(Vector2D a, Vector2D b) {
-    double v0 = b.x - a.x;
-    double v1 = b.y - a.y;
+    double v0 = a.x - b.x;
+    double v1 = a.y - b.y;
     return Math.sqrt(v0 * v0 + v1 * v1);
   }
 

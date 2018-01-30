@@ -11,19 +11,17 @@ public class Car {
   private Vector2D direction;
   private double velocity;
 
-  /*
-   *Constructors
+  /**
+   * Constructor with direction and position.
    */
-  public Car() {
-    this.position = new Vector2D();
-    this.direction = new Vector2D();
-    this.velocity = 0;
-  }
-
   public Car(Vector2D position, Vector2D direction) {
     this.position = position;
     this.direction = direction;
     this.velocity = 0;
+  }
+
+  public boolean isMoving(){
+    return velocity!=0;
   }
 
   public void steerRight() {
@@ -33,7 +31,6 @@ public class Car {
   public void steerLeft() {
     direction.rotate(-0.03);
   }
-
 
 
   public void brake(double delta) {
@@ -46,9 +43,6 @@ public class Car {
     }
   }
 
-  public boolean isMoving() {
-    return velocity != 0;
-  }
 
   public void moveCar(double delta) {
     direction.normalize();

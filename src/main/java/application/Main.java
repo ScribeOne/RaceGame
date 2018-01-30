@@ -9,6 +9,9 @@ import model.GameModel;
 import view.GameView;
 
 
+/**
+ * Main Class to start the JavaFX Application.
+ */
 public class Main extends Application {
 
 
@@ -25,10 +28,8 @@ public class Main extends Application {
     GameView gameView = new GameView(primaryStage);
     GameController gameController = new GameController(gameModel, gameView);
 
-
-
     oldTime = System.currentTimeMillis();
-    System.out.println("current time: " + oldTime);
+
     /*
      * Start the gameloop.
      * It is executed every frame, the long now is the current timestamp
@@ -62,6 +63,9 @@ public class Main extends Application {
   }
 
 
+  /**
+   * Main to call the launch method.
+   */
   public static void main(String[] args) {
     launch(args);
   }

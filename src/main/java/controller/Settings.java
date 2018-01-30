@@ -30,7 +30,7 @@ public class Settings {
   public static final double CARHEIGHT = 2.027;
 
   // initial position of the race car
-  public static final Vector2D initialPosition = new Vector2D(660.0f, 90.0f);
+  public static final Vector2D initialPosition = new Vector2D(650.0f, 90.0f);
   public static final Vector2D INITIALDIRECTION = new Vector2D(-1.0f, 0.0f);
 
   /**
@@ -43,6 +43,14 @@ public class Settings {
 
   //Path to style Files
   public static final String MENUCSS = "/style/menu.css";
+  public static final String GAMECSS = "/style/game.css";
+  /*
+   * Sound under Creative Common Licence from
+   * https://freesound.org/people/willybilly1984/sounds/345335/
+  */
+  public static final String CARENGINESOUND = "/sound/carEngine.mp3";
+  public static final String ENGINERUNNING = "/sound/runningEngine.mp3";
+  public static final String INTRO = "/sound/Intro.mp3";
 
   // acceleration and brake values
   //public static final double ACCELERATIONVALUE = 200;
