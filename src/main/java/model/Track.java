@@ -45,8 +45,8 @@ public class Track {
     checkpoint = new Line(checkpointUp.getX(), checkpointUp.getY(), checkPointDown.getY(),
         checkPointDown.getY());
 
-    finishRect = new Rectangle(centerX, centerY - outerRadiusY, 3, tracksize);
-    checkPointRect = new Rectangle(centerX, centerY + innerRadiusY, 3, tracksize);
+    finishRect = new Rectangle(centerX, centerY - outerRadiusY, 5, tracksize);
+    checkPointRect = new Rectangle(centerX, centerY + innerRadiusY, 5, tracksize);
   }
 
   public Rectangle getFinishRect() {

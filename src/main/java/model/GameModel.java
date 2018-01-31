@@ -36,7 +36,6 @@ public class GameModel {
           obstacle.getRadius() / 2);
 
       if (circle.getBoundsInParent().intersects(carRect.getBoundsInParent())) {
-        System.out.println("Collision detected!");
         if (car.getVelocity() >= Settings.CRASHTHRESHOLD) {
           alive = false;
         }
@@ -55,13 +54,11 @@ public class GameModel {
         won = true;
       }
       passedStart = true;
-      System.out.println("passed start");
     }
 
     if (track.getCheckPointRect()
         .contains(Math.round(car.getPosition().getX()), Math.round(car.getPosition().getY()))) {
       passedCheckpoint = true;
-      System.out.println("passed Checkpoint");
     }
   }
 

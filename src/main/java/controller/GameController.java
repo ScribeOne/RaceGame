@@ -74,7 +74,7 @@ public class GameController {
 
 
   /**
-   *  Update SoundController flags with info from the game model and play the sounds.
+   * Update SoundController flags with info from the game model and play the sounds.
    */
   private void playSound() {
     soundController.update(menu, gameModel.isAlive(), accelerate, gameModel.getCar().isMoving());
@@ -87,17 +87,6 @@ public class GameController {
    */
   private void renderGameView() {
     gameView.setView(menu, infoMode);
-        /*
-        counter++;
-        timeBuffer += delta;
-        if (counter == 60) {
-            if (infoMode) {
-                fpsTimer = Math.round(timeBuffer * 60);
-            }
-            counter = 0;
-            timeBuffer = 0;
-        }
-        */
 
     gameView.clear();
     gameView.renderTrack(gameModel.getTrack());
@@ -110,8 +99,15 @@ public class GameController {
           gameModel.getTrack().isOnTrack(gameModel.getCarPosition()));
     }
     if (gameModel.hasWon()) {
-      //gameView.showWon();
-      System.out.println("You WON!!!");
+      gameView.showWon(gameModel.hasWon());
+      gameView.setWinText(stopwatch.getElapsedTime());
+      stopwatch.pause();
+      gameModel.getCar().setVelocity(0);
+    }
+    if (!gameModel.isAlive() && !menu) {
+      gameView.gameOver(gameModel.isAlive());
+      gameModel.getCar().setVelocity(0);
+      stopwatch.pause();
     }
   }
 
@@ -131,7 +127,6 @@ public class GameController {
       stopwatch.start();
     }
     if (!gameModel.isAlive()) {
-      System.out.println("car destroyed!");
     }
   }
 
@@ -151,7 +146,6 @@ public class GameController {
    */
   private void toggleInfo() {
     infoMode = !infoMode;
-    System.out.println("info mode: " + infoMode);
   }
 
 
@@ -160,14 +154,11 @@ public class GameController {
    */
   private void reset() {
     gameModel.resetCar();
+    gameModel.setWon(false);
+    gameView.gameOver(true);
+    gameView.showWon(false);
     stopwatch.reset();
     stopwatch.stop();
-    System.out.println("Reset - Printing obstacle positions: ");
-    for (Obstacle obstacle : gameModel.getTrack().getObstacles()) {
-      System.out.println(
-          "obstacle at: [" + obstacle.getPosition().getX() + "|" + obstacle.getPosition().getY()
-              + "] ");
-    }
   }
 
 
@@ -195,6 +186,10 @@ public class GameController {
     //get buttons from the gameView
     Button start = gameView.getStartButton();
     Button exit = gameView.getExitButton();
+    Button retry = gameView.getTryAgainButton();
+    Button menuButton = gameView.getMenuButton();
+    Button retry1 = gameView.getTryAgainButton1();
+    Button menuButton1 = gameView.getMenuButton1();
 
     scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
       @Override
@@ -257,6 +252,52 @@ public class GameController {
         }
       }
     });   //end keyReleased
+
+    /**
+     * Event Handler for the Restart Button.
+     */
+    retry.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent mouseEvent) {
+        System.out.println("mouse click detected! " + mouseEvent.getSource());
+        reset();
+      }
+    });
+
+    /**
+     * Event Handler for the Menu Button.
+     */
+    menuButton.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent mouseEvent) {
+        System.out.println("mouse click detected! " + mouseEvent.getSource());
+        menu = true;
+        reset();
+      }
+    });
+
+    /**
+     * Event Handler for the Restart Button.
+     */
+    retry1.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent mouseEvent) {
+        System.out.println("mouse click detected! " + mouseEvent.getSource());
+        reset();
+      }
+    });
+
+    /**
+     * Event Handler for the Menu Button.
+     */
+    menuButton1.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent mouseEvent) {
+        System.out.println("mouse click detected! " + mouseEvent.getSource());
+        menu = true;
+        reset();
+      }
+    });
 
     /**
      * Event Handler for the Start Game Button. Disables the menu, resets the car.

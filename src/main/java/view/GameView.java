@@ -7,8 +7,6 @@ import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -37,10 +35,10 @@ public class GameView {
   private Scene scene;
   private Stage stage;
   private StackPane rootPane;
-  private Pane gamePane, infoPane, menuPane, pausePane;
-  private Label fps, carPos, velo, dir, tracker;
-  private boolean infoShown, menuShown, pauseShown;
-  private Button startButton, exitButton;
+  private Pane gamePane, infoPane, menuPane, pausePane, gameOverPane, winPane;
+  private Label fps, carPos, velo, dir, tracker, timeLabel;
+  private boolean infoShown, menuShown, pauseShown, showGameOver, showWon;
+  private Button startButton, exitButton, tryAgainButton, menuButton, tryAgainButton1, menuButton1;
   private Rectangle carRect;
   private Image raceCar, explosion;
 
@@ -53,7 +51,7 @@ public class GameView {
   public GameView(Stage stage) {
     // set stage
     this.stage = stage;
-    stage.setTitle("Race Game v1.2");
+    stage.setTitle("Race Game v1.3");
     stage.setResizable(false);
     stage.sizeToScene();
 
@@ -69,11 +67,17 @@ public class GameView {
     setUpInfoPane();
     setUpMenuPane();
     setupPausePane();
+    setupGameOver();
+    setupWinning();
 
     //Set style for the different Panes
     menuPane.getStylesheets().add(Settings.MENUCSS);
     pausePane.getStylesheets().add(Settings.GAMECSS);
-    //gamePane.getStyleClass().add(Settings.GAMECSS);
+    gameOverPane.getStylesheets().add(Settings.GAMECSS);
+    winPane.getStylesheets().add(Settings.GAMECSS);
+
+    showGameOver = false;
+    showWon = false;
 
     // load custom font
     Font.loadFont(
@@ -86,6 +90,103 @@ public class GameView {
     //set scene to stage
     stage.setScene(scene);
   }
+
+
+  public void setupWinning() {
+    winPane = new Pane();
+    winPane.setPrefSize(1300, 800);
+    winPane.getStyleClass().add("gameOver");
+
+    //Setup VBox that holds the buttons
+    VBox menuBox = new VBox(20);
+    menuBox.setPrefSize(Settings.WIDTH, Settings.HEIGHT);
+    menuBox.setAlignment(Pos.CENTER);
+
+    Label wonLabel = new Label();
+    wonLabel.setText("WON");
+    wonLabel.getStyleClass().add("gameOverText");
+
+    Label wonText = new Label();
+    wonText.setText("Your time:");
+    wonText.getStyleClass().add("winningText");
+
+    timeLabel = new Label();
+    timeLabel.setText("");
+    timeLabel.getStyleClass().add("winningText");
+
+    //Create Buttons
+    tryAgainButton1 = new Button();
+    tryAgainButton1.setPrefSize(250, 25);
+    tryAgainButton1.setText("TRY AGAIN");
+    menuButton1 = new Button();
+    menuButton1.setPrefSize(250, 25);
+    menuButton1.setText("BACK TO MENU");
+
+    menuButton1.getStyleClass().add("menu-button");
+    tryAgainButton1.getStyleClass().add("menu-button");
+
+    menuBox.getChildren().addAll(wonLabel,wonText, timeLabel, tryAgainButton1, menuButton1);
+    winPane.getChildren().add(menuBox);
+  }
+
+  /**
+   * Adds the game Over Pane to the Stackpane to make it visible.
+   */
+  public void showWon(boolean won) {
+    if (won && !showWon) {
+      rootPane.getChildren().add(winPane);
+      showWon = true;
+    }
+    if (!won && showWon) {
+      rootPane.getChildren().remove(winPane);
+      showWon = false;
+    }
+  }
+
+
+  public void setupGameOver() {
+    gameOverPane = new Pane();
+    gameOverPane.setPrefSize(1300, 800);
+    gameOverPane.getStyleClass().add("gameOver");
+
+    //Setup VBox that holds the buttons
+    VBox menuBox = new VBox(20);
+    menuBox.setPrefSize(Settings.WIDTH, Settings.HEIGHT);
+    menuBox.setAlignment(Pos.CENTER);
+
+    Label gameOverText = new Label();
+    gameOverText.setText("Game Over");
+    gameOverText.getStyleClass().add("gameOverText");
+
+    //Create Buttons
+    tryAgainButton = new Button();
+    tryAgainButton.setPrefSize(250, 25);
+    tryAgainButton.setText("TRY AGAIN");
+    menuButton = new Button();
+    menuButton.setPrefSize(250, 25);
+    menuButton.setText("BACK TO MENU");
+
+    menuButton.getStyleClass().add("menu-button");
+    tryAgainButton.getStyleClass().add("menu-button");
+
+    menuBox.getChildren().addAll(gameOverText, tryAgainButton, menuButton);
+    gameOverPane.getChildren().add(menuBox);
+  }
+
+  /**
+   * Adds the game Over Pane to the Stackpane to make it visible.
+   */
+  public void gameOver(boolean alive) {
+    if (!alive && !showGameOver) {
+      rootPane.getChildren().add(gameOverPane);
+      showGameOver = true;
+    }
+    if (alive && showGameOver) {
+      rootPane.getChildren().remove(gameOverPane);
+      showGameOver = false;
+    }
+  }
+
 
   /**
    * display the current track time from the stopwatch.
@@ -254,12 +355,6 @@ public class GameView {
     return carRect;
   }
 
-  public void showExplosion(Vector2D position) {
-    gc.setFill(new ImagePattern(explosion, 0, 0, 1, 1, true));
-    gc.fillRect(position.getX(),
-        position.getY(), 50, 50);
-  }
-
 
   /**
    * Draw the car at its current position. Explosion image shown when alive flag is false.
@@ -404,8 +499,28 @@ public class GameView {
     return startButton;
   }
 
+  public void setWinText(long wintime) {
+    timeLabel.setText(secondsToString(wintime));
+  }
+
   public Button getExitButton() {
     return exitButton;
+  }
+
+  public Button getTryAgainButton() {
+    return tryAgainButton;
+  }
+
+  public Button getMenuButton() {
+    return menuButton;
+  }
+
+  public Button getTryAgainButton1() {
+    return tryAgainButton1;
+  }
+
+  public Button getMenuButton1() {
+    return menuButton1;
   }
 
   public Stage getStage() {
