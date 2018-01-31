@@ -7,6 +7,8 @@ import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -15,6 +17,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Affine;
@@ -38,6 +41,8 @@ public class GameView {
   private Label fps, carPos, velo, dir, tracker;
   private boolean infoShown, menuShown, pauseShown;
   private Button startButton, exitButton;
+  private Rectangle carRect;
+  private Image raceCar, explosion;
 
 
   /**
@@ -48,13 +53,16 @@ public class GameView {
   public GameView(Stage stage) {
     // set stage
     this.stage = stage;
-    stage.setTitle("Race Game v1.1");
+    stage.setTitle("Race Game v1.2");
     stage.setResizable(false);
     stage.sizeToScene();
 
     // create Stackpane and add to scene
     rootPane = new StackPane();
     scene = new Scene(rootPane, Settings.WIDTH, Settings.HEIGHT);
+
+    raceCar = new Image(Settings.CARPATH);
+    explosion = new Image(Settings.EXPLOSIONPATH);
 
     // create all content panes that get stacked up on the root pane
     setUpGamePane();
@@ -73,6 +81,8 @@ public class GameView {
         10
     );
 
+    carRect = new Rectangle();
+
     //set scene to stage
     stage.setScene(scene);
   }
@@ -84,11 +94,11 @@ public class GameView {
    */
   public void printTrackTime(long elapsedTime) {
     gc.setFill(Color.BLACK);
-    gc.setFont(new Font(30));
+    gc.setFont(new Font(35));
     gc.setTextAlign(TextAlignment.CENTER);
     gc.setTextBaseline(VPos.CENTER);
     gc.fillText(secondsToString(elapsedTime),
-        1200,
+        1190,
         75
     );
   }
@@ -194,6 +204,11 @@ public class GameView {
     tracker.setText("Car is on track: " + carOnTrack);
   }
 
+  public void showWon() {
+    gc.setFill(Color.BLACK);
+    gc.fillRect(0, 0, 1300, 800);
+  }
+
 
   /**
    * draw the pause overlay on the canvas with text and transparent box.
@@ -235,19 +250,43 @@ public class GameView {
   }
 
 
+  public Rectangle getCarRect() {
+    return carRect;
+  }
+
+  public void showExplosion(Vector2D position) {
+    gc.setFill(new ImagePattern(explosion, 0, 0, 1, 1, true));
+    gc.fillRect(position.getX(),
+        position.getY(), 50, 50);
+  }
+
+
   /**
-   * draw the car at its current position.
+   * Draw the car at its current position. Explosion image shown when alive flag is false.
    */
-  public void renderCar(Vector2D position, double newAngle) {
-    Image blueCar = new Image(Settings.CARPATH);
-    double pivotX = (position.getX() + Settings.meterToPixel(Settings.CARWIDTH) / 2);
-    double pivotY = (position.getY() + Settings.meterToPixel(Settings.CARHEIGHT) / 2);
+  public void renderCar(Vector2D position, double newAngle, boolean alive) {
+    double pivotX = (position.getX());
+    double pivotY = (position.getY());
+    carRect = new Rectangle(position.getX() - Settings.meterToPixel(Settings.CARWIDTH) / 2,
+        position.getY() - Settings.meterToPixel(Settings.CARHEIGHT) / 2,
+        Settings.meterToPixel(Settings.CARWIDTH),
+        Settings.meterToPixel(Settings.CARHEIGHT));
+    carRect.getTransforms().add(new Affine(new Rotate(newAngle, pivotX, pivotY)));
     gc.save();
     gc.transform(new Affine(new Rotate(newAngle, pivotX, pivotY)));
-    gc.setFill(new ImagePattern(blueCar, 0, 0, 1, 1, true));
-    gc.fillRect(position.getX(), position.getY(), Settings.meterToPixel(Settings.CARWIDTH),
+    gc.setFill(new ImagePattern(raceCar, 0, 0, 1, 1, true));
+    gc.fillRect(position.getX() - Settings.meterToPixel(Settings.CARWIDTH) / 2,
+        position.getY() - Settings.meterToPixel(Settings.CARHEIGHT) / 2,
+        Settings.meterToPixel(Settings.CARWIDTH),
         Settings.meterToPixel(Settings.CARHEIGHT));
     gc.restore();
+
+    // Explosion
+    if (!alive) {
+      gc.setFill(new ImagePattern(explosion, 0, 0, 1, 1, true));
+      gc.fillRect(position.getX() - 20,
+          position.getY() - 20, 40, 40);
+    }
 
   }
 
@@ -305,8 +344,9 @@ public class GameView {
     //Obstacles
     gc.setFill(Settings.OBSTACLECOLOR);
     for (Obstacle obstacle : track.getObstacles()) {
-      gc.fillOval(obstacle.getPosition().getX(), obstacle.getPosition().getY(),
-          obstacle.getRadius(), obstacle.getRadius());
+      gc.fillOval(obstacle.getPosition().getX() - Settings.OBSTACLERADIUS,
+          obstacle.getPosition().getY() - Settings.OBSTACLERADIUS,
+          obstacle.getRadius() * 2, obstacle.getRadius() * 2);
     }
   }
 

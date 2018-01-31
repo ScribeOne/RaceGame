@@ -2,9 +2,11 @@ package controller;
 
 import java.util.Optional;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.KeyEvent;
@@ -16,6 +18,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import model.GameModel;
+import model.Obstacle;
 import model.Stopwatch;
 import view.GameView;
 
@@ -23,16 +26,17 @@ import view.GameView;
  * Class to connect Model with View and handle user input.
  * The GameController gets called every time frame and updates game model with delta time.
  * View gets then updated with the model data.
+ * Handles the Tracktime with a Stopwatch and Game Sound with Mediaplayers.
  */
 public class GameController {
 
   private GameView gameView;
   private GameModel gameModel;
+  private SoundController soundController;
   private Scene scene;
   private Stage stage;
   private boolean accelerate, steerLeft, steerRight, brake, pause, infoMode, menu, sound;
   private Stopwatch stopwatch;
-  private MediaPlayer effectPlayer, engineSoundPlayer, musicPlayer;
 
   /**
    * constructor
@@ -40,21 +44,20 @@ public class GameController {
    * @param gameModel data
    * @param gameView view
    */
-  public GameController(GameModel gameModel, GameView gameView) {
+  public GameController(GameModel gameModel, GameView gameView, SoundController soundController) {
     this.gameView = gameView;
     this.gameModel = gameModel;
+    this.soundController = soundController;
     this.scene = gameView.getScene();
     this.stage = gameView.getStage();
 
     this.stopwatch = new Stopwatch();
 
-    setupEngineSound();
-    setupMenuMusic();
-    setupCarSound();
     setUpInputHandler();
 
+    //Turn default views on and off with flags
     menu = true;
-    infoMode = true;
+    infoMode = false;
     sound = true;
   }
 
@@ -69,94 +72,13 @@ public class GameController {
     playSound();
   }
 
+
   /**
-   * plays all sounds if sound is turned on.
+   *  Update SoundController flags with info from the game model and play the sounds.
    */
   private void playSound() {
-    if (sound) {
-      playCarSound();
-      playIntroMusic();
-      playEngineRunningSound();
-    }
-  }
-
-  /**
-   * Setup the media player with the car engine sound.
-   * Plays an infinite loop on calling play().
-   * Does nothing when calling play() while already playing.
-   * Has to be stopped with stop().
-   */
-  private void setupCarSound() {
-    String musicFile = Settings.CARENGINESOUND;
-    Media sound = new Media(this.getClass().getResource(musicFile).toExternalForm());
-    effectPlayer = new MediaPlayer(sound);
-    effectPlayer.setOnEndOfMedia(new Runnable() {
-      public void run() {
-        effectPlayer.seek(Duration.ZERO);
-      }
-    });
-  }
-
-  /**
-   * setup Mediaplayer for sound of running engine.
-   */
-  private void setupEngineSound() {
-    String mediafile = Settings.ENGINERUNNING;
-    Media sound = new Media(this.getClass().getResource(mediafile).toExternalForm());
-    engineSoundPlayer = new MediaPlayer(sound);
-    engineSoundPlayer.setOnEndOfMedia(new Runnable() {
-      public void run() {
-        engineSoundPlayer.seek(Duration.ZERO);
-      }
-    });
-  }
-
-  /**
-   * setup of Mediaplayer for menu music.
-   */
-  private void setupMenuMusic() {
-    String musicFile = Settings.INTRO;
-    Media sound = new Media(this.getClass().getResource(musicFile).toExternalForm());
-    musicPlayer = new MediaPlayer(sound);
-    musicPlayer.setOnEndOfMedia(new Runnable() {
-      public void run() {
-        musicPlayer.seek(Duration.ZERO);
-      }
-    });
-  }
-
-  /**
-   * play the Intro Music if menu is shown.
-   */
-  private void playIntroMusic() {
-    if (menu) {
-      musicPlayer.play();
-    } else {
-      musicPlayer.stop();
-    }
-  }
-
-  /**
-   * play the engine running sound if car is moving.
-   */
-  private void playEngineRunningSound() {
-    if (gameModel.getCar().isMoving()) {
-      engineSoundPlayer.play();
-    } else {
-      engineSoundPlayer.stop();
-    }
-  }
-
-
-  /**
-   * play the engine sound if car is accelerating.
-   */
-  private void playCarSound() {
-    if (accelerate) {
-      effectPlayer.play();
-    } else {
-      effectPlayer.stop();
-    }
+    soundController.update(menu, gameModel.isAlive(), accelerate, gameModel.getCar().isMoving());
+    soundController.playSound(sound);
   }
 
 
@@ -180,12 +102,16 @@ public class GameController {
     gameView.clear();
     gameView.renderTrack(gameModel.getTrack());
     gameView.printTrackTime(stopwatch.getElapsedTime());
-    gameView.renderCar(gameModel.getCarPosition(), gameModel.getCarAngle());
+    gameView.renderCar(gameModel.getCarPosition(), gameModel.getCarAngle(), gameModel.isAlive());
     gameView.setPause(pause);
     if (infoMode) {
       gameView.updateInfo(60, gameModel.getCarPosition(), gameModel.getCar().getVelocity(),
           gameModel.getCar().getAngle(),
           gameModel.getTrack().isOnTrack(gameModel.getCarPosition()));
+    }
+    if (gameModel.hasWon()) {
+      //gameView.showWon();
+      System.out.println("You WON!!!");
     }
   }
 
@@ -195,20 +121,27 @@ public class GameController {
    * @param delta elapsed time
    */
   private void updateGameModel(double delta) {
+
     if (!pause) {
       gameModel.updateCarControl(accelerate, steerLeft, steerRight, brake);
       gameModel.updateCar(delta);
+      gameModel.collisionDetection(gameView.getCarRect());
+    }
+    if (gameModel.isPassedStart()) {
+      stopwatch.start();
+    }
+    if (!gameModel.isAlive()) {
+      System.out.println("car destroyed!");
     }
   }
+
 
   /**
    * turn sound on and off, stops all sound when turning off.
    */
   private void toggleSound() {
-    if(sound){
-      musicPlayer.stop();
-      engineSoundPlayer.stop();
-      effectPlayer.stop();
+    if (sound) {
+
     }
     sound = !sound;
   }
@@ -227,7 +160,14 @@ public class GameController {
    */
   private void reset() {
     gameModel.resetCar();
-    stopwatch.start();
+    stopwatch.reset();
+    stopwatch.stop();
+    System.out.println("Reset - Printing obstacle positions: ");
+    for (Obstacle obstacle : gameModel.getTrack().getObstacles()) {
+      System.out.println(
+          "obstacle at: [" + obstacle.getPosition().getX() + "|" + obstacle.getPosition().getY()
+              + "] ");
+    }
   }
 
 
@@ -238,9 +178,11 @@ public class GameController {
     if (!pause) {
       gameModel.toggleVelocity();
       pause = true;
+      stopwatch.pause();
     } else {
       gameModel.toggleVelocity();
       pause = false;
+      stopwatch.resume();
     }
   }
 

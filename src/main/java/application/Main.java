@@ -1,5 +1,6 @@
 package application;
 
+import controller.SoundController;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.text.Font;
@@ -26,7 +27,8 @@ public class Main extends Application {
     //Create instances for the game
     GameModel gameModel = new GameModel();
     GameView gameView = new GameView(primaryStage);
-    GameController gameController = new GameController(gameModel, gameView);
+    SoundController soundController = new SoundController();
+    GameController gameController = new GameController(gameModel, gameView, soundController);
 
     oldTime = System.currentTimeMillis();
 

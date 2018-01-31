@@ -5,6 +5,7 @@ import controller.Settings;
 import java.util.LinkedList;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 
 /**
  * Class to represent the race track.
@@ -15,6 +16,8 @@ public class Track {
   private LinkedList<Obstacle> obstacles;
   private Line finish, checkpoint;
   private Point2D finishUp, finishDown, checkpointUp, checkPointDown;
+  private double tracksize;
+  private Rectangle finishRect, checkPointRect;
 
 
   /**
@@ -30,6 +33,8 @@ public class Track {
     this.outerRadiusY = outerRadiusY;
     this.obstacles = new LinkedList<>();
 
+    this.tracksize = outerRadiusX - innerRadiusX;
+
     finishUp = new Point2D(centerX, centerY - outerRadiusY);
     finishDown = new Point2D(centerX, centerY - innerRadiusY);
 
@@ -39,6 +44,13 @@ public class Track {
     finish = new Line(finishUp.getX(), finishUp.getY(), finishDown.getX(), finishDown.getY());
     checkpoint = new Line(checkpointUp.getX(), checkpointUp.getY(), checkPointDown.getY(),
         checkPointDown.getY());
+
+    finishRect = new Rectangle(centerX, centerY - outerRadiusY, 3, tracksize);
+    checkPointRect = new Rectangle(centerX, centerY + innerRadiusY, 3, tracksize);
+  }
+
+  public Rectangle getFinishRect() {
+    return finishRect;
   }
 
   public boolean isOnTrack(Vector2D position) {
@@ -80,13 +92,12 @@ public class Track {
   private Obstacle findFittingObstacle() {
     while (true) {
       Vector2D position = new Vector2D();
-      position.setX((Math.random() * Settings.WIDTH) - Settings.OBSTACLERADIUS);
-      position.setY((Math.random() * Settings.HEIGHT) - Settings.OBSTACLERADIUS);
-      System.out.println(
-          "Guess (" + position.getX() + " | " + position.getY() + " is " + isOnTrack(position));
+      position.setX((Math.random() * Settings.WIDTH));
+      position.setY((Math.random() * Settings.HEIGHT));
       if (isOnTrack(position)) {
-        System.out.println("found an obstacle");
-        return new Obstacle(position, Settings.OBSTACLERADIUS);
+        if (!((position.getX() > 600 && position.getX() < 800) && position.getY() < 500)) {
+          return new Obstacle(position, Settings.OBSTACLERADIUS);
+        }
       } else {
         position = null;
       }
@@ -131,6 +142,9 @@ public class Track {
     return outerRadiusY;
   }
 
+  public Rectangle getCheckPointRect() {
+    return checkPointRect;
+  }
 
   public Line getFinish() {
     return finish;

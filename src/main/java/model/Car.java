@@ -20,6 +20,9 @@ public class Car {
     this.velocity = 0;
   }
 
+  /**
+   * Check if car is moving.
+   */
   public boolean isMoving(){
     return velocity!=0;
   }
@@ -54,7 +57,7 @@ public class Car {
   }
 
   public void resetDirection() {
-    direction.setX(-1);
+    direction.setX(1);
     direction.setY(0);
   }
 

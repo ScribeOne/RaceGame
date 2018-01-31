@@ -30,8 +30,9 @@ public class Settings {
   public static final double CARHEIGHT = 2.027;
 
   // initial position of the race car
-  public static final Vector2D initialPosition = new Vector2D(650.0f, 90.0f);
-  public static final Vector2D INITIALDIRECTION = new Vector2D(-1.0f, 0.0f);
+  public static final Vector2D initialPosition = new Vector2D(
+      650 - (meterToPixel(Settings.CARWIDTH / 2)) - 10, 100.0f);
+  public static final Vector2D INITIALDIRECTION = new Vector2D(1.0f, 0.0f);
 
   /**
    * Needed to define where zero degree is. (1,0) represents the x-Axis. Degree is ascending counter-clockwise.
@@ -41,20 +42,25 @@ public class Settings {
   //Path to the car image
   public static final String CARPATH = "/images/raceCarOrange.png";
 
+  public static final String EXPLOSIONPATH = "/images/Explosion.png";
+
   //Path to style Files
   public static final String MENUCSS = "/style/menu.css";
   public static final String GAMECSS = "/style/game.css";
   /*
    * Sound under Creative Common Licence from
    * https://freesound.org/people/willybilly1984/sounds/345335/
-  */
+   */
   public static final String CARENGINESOUND = "/sound/carEngine.mp3";
   public static final String ENGINERUNNING = "/sound/runningEngine.mp3";
   public static final String INTRO = "/sound/Intro.mp3";
+  public static final String EXPOSIONSOUND = "/sound/Explosion.mp3";
 
   // acceleration and brake values
   //public static final double ACCELERATIONVALUE = 200;
   public static final double BRAKEVALUE = -80;
+
+  public static final double CRASHTHRESHOLD = 100;
 
   // Physic values
   public static final double normalForce = 9.81;
@@ -74,8 +80,8 @@ public class Settings {
   public static final double OFFROADRESISTANCE = 0.05;
 
   //Obstacle Settings
-  public static final double OBSTACLERADIUS = 25;
-  public static final int OBSTACLEAMOUNT = 20;
+  public static final double OBSTACLERADIUS = 15;
+  public static final int OBSTACLEAMOUNT = 5;
 
   //Methods to convert Pixel <-> Meter
   static public double meterToPixel(double input) {
