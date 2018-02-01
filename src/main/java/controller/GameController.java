@@ -41,8 +41,9 @@ public class GameController {
   /**
    * constructor
    *
-   * @param gameModel data
-   * @param gameView view
+   * @param gameModel all game data stored in model
+   * @param gameView view renders all GUI elements
+   * @param soundController handles all sound effects
    */
   public GameController(GameModel gameModel, GameView gameView, SoundController soundController) {
     this.gameView = gameView;
@@ -51,8 +52,10 @@ public class GameController {
     this.scene = gameView.getScene();
     this.stage = gameView.getStage();
 
+    //create a stopwatch for track time
     this.stopwatch = new Stopwatch();
 
+    // Setup Eventhandler for user input
     setUpInputHandler();
 
     //Turn default views on and off with flags
@@ -83,27 +86,38 @@ public class GameController {
 
 
   /**
-   * Render the content to the screen. Calls methods in the game view.
+   * Render the content to the screen.
+   * Calls methods of the game view with data from the game model.
    */
   private void renderGameView() {
+    // set flags
     gameView.setView(menu, infoMode);
 
+    // clear the view first
     gameView.clear();
+
+    //render all game objects, track first
     gameView.renderTrack(gameModel.getTrack());
     gameView.printTrackTime(stopwatch.getElapsedTime());
     gameView.renderCar(gameModel.getCarPosition(), gameModel.getCarAngle(), gameModel.isAlive());
     gameView.setPause(pause);
+
+    // show info box when flag is true
     if (infoMode) {
       gameView.updateInfo(60, gameModel.getCarPosition(), gameModel.getCar().getVelocity(),
           gameModel.getCar().getAngle(),
           gameModel.getTrack().isOnTrack(gameModel.getCarPosition()));
     }
+
+    // check if the game has been won and show winning screen
     if (gameModel.hasWon()) {
       gameView.showWon(gameModel.hasWon());
       gameView.setWinText(stopwatch.getElapsedTime());
       stopwatch.pause();
       gameModel.getCar().setVelocity(0);
     }
+
+    // Show the game over screen when lost and not in the menu
     if (!gameModel.isAlive() && !menu) {
       gameView.gameOver(gameModel.isAlive());
       gameModel.getCar().setVelocity(0);
@@ -117,16 +131,16 @@ public class GameController {
    * @param delta elapsed time
    */
   private void updateGameModel(double delta) {
-
+    // update if not paused
     if (!pause) {
       gameModel.updateCarControl(accelerate, steerLeft, steerRight, brake);
       gameModel.updateCar(delta);
       gameModel.collisionDetection(gameView.getCarRect());
     }
+
+    // start the stopwatch of car has passed start line
     if (gameModel.isPassedStart()) {
       stopwatch.start();
-    }
-    if (!gameModel.isAlive()) {
     }
   }
 
@@ -135,9 +149,6 @@ public class GameController {
    * turn sound on and off, stops all sound when turning off.
    */
   private void toggleSound() {
-    if (sound) {
-
-    }
     sound = !sound;
   }
 
@@ -259,7 +270,6 @@ public class GameController {
     retry.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent mouseEvent) {
-        System.out.println("mouse click detected! " + mouseEvent.getSource());
         reset();
       }
     });
@@ -270,7 +280,6 @@ public class GameController {
     menuButton.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent mouseEvent) {
-        System.out.println("mouse click detected! " + mouseEvent.getSource());
         menu = true;
         reset();
       }
@@ -282,7 +291,6 @@ public class GameController {
     retry1.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent mouseEvent) {
-        System.out.println("mouse click detected! " + mouseEvent.getSource());
         reset();
       }
     });
@@ -293,7 +301,6 @@ public class GameController {
     menuButton1.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent mouseEvent) {
-        System.out.println("mouse click detected! " + mouseEvent.getSource());
         menu = true;
         reset();
       }
@@ -305,7 +312,6 @@ public class GameController {
     start.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent mouseEvent) {
-        System.out.println("mouse click detected! " + mouseEvent.getSource());
         menu = false;
         reset();
       }
@@ -317,7 +323,6 @@ public class GameController {
     exit.addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent mouseEvent) {
-        System.out.println("mouse click detected! " + mouseEvent.getSource());
         exit.setOnAction(event ->
             stage.fireEvent(
                 new WindowEvent(

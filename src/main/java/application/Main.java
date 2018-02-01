@@ -12,6 +12,8 @@ import view.GameView;
 
 /**
  * Main Class to start the JavaFX Application.
+ *
+ * @author Michael Haeusslein
  */
 public class Main extends Application {
 
@@ -66,7 +68,7 @@ public class Main extends Application {
 
 
   /**
-   * Main to call the launch method.
+   * main method required to call the launch method.
    */
   public static void main(String[] args) {
     launch(args);

@@ -2,6 +2,7 @@ package view;
 
 import application.Main;
 import controller.Settings;
+import java.util.Set;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
@@ -51,7 +52,7 @@ public class GameView {
   public GameView(Stage stage) {
     // set stage
     this.stage = stage;
-    stage.setTitle("Race Game v1.3");
+    stage.setTitle("Race Game v1.4");
     stage.setResizable(false);
     stage.sizeToScene();
 
@@ -125,7 +126,7 @@ public class GameView {
     menuButton1.getStyleClass().add("menu-button");
     tryAgainButton1.getStyleClass().add("menu-button");
 
-    menuBox.getChildren().addAll(wonLabel,wonText, timeLabel, tryAgainButton1, menuButton1);
+    menuBox.getChildren().addAll(wonLabel, wonText, timeLabel, tryAgainButton1, menuButton1);
     winPane.getChildren().add(menuBox);
   }
 
@@ -227,6 +228,8 @@ public class GameView {
     //Setup VBox that holds the buttons
     VBox menuBox = new VBox(20);
     menuBox.setPrefSize(Settings.WIDTH, Settings.HEIGHT);
+    menuBox.setLayoutX(0);
+    menuBox.setLayoutY(50);
     menuBox.setAlignment(Pos.CENTER);
 
     //Create Buttons
@@ -439,9 +442,9 @@ public class GameView {
     //Obstacles
     gc.setFill(Settings.OBSTACLECOLOR);
     for (Obstacle obstacle : track.getObstacles()) {
-      gc.fillOval(obstacle.getPosition().getX() - Settings.OBSTACLERADIUS,
-          obstacle.getPosition().getY() - Settings.OBSTACLERADIUS,
-          obstacle.getRadius() * 2, obstacle.getRadius() * 2);
+      gc.fillOval(obstacle.getPosition().getX() - Settings.OBSTACLERADIUS /2,
+          obstacle.getPosition().getY() - Settings.OBSTACLERADIUS/2,
+          obstacle.getRadius() *2, obstacle.getRadius() *2 );
     }
   }
 

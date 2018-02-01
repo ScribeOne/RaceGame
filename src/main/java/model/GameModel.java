@@ -14,7 +14,6 @@ public class GameModel {
   private Car car;
   private Track track;
   private double oldVelocity;
-
   private boolean accelerate, steerLeft, steerRight, brake, passedStart, passedCheckpoint, won, alive;
 
   /**
@@ -28,26 +27,13 @@ public class GameModel {
     won = false;
   }
 
-  public void collisionDetection(Rectangle carRect) {
 
-    for (Obstacle obstacle : track.getObstacles()) {
-      Circle circle = new Circle(obstacle.getPosition().getX(),
-          obstacle.getPosition().getY(),
-          obstacle.getRadius() / 2);
-
-      if (circle.getBoundsInParent().intersects(carRect.getBoundsInParent())) {
-        if (car.getVelocity() >= Settings.CRASHTHRESHOLD) {
-          alive = false;
-        }
-        {
-          car.setVelocity(0);
-        }
-      }
-    }
-  }
-
+  /**
+   * check if the race car has passed the start/finish and checkpoint line.
+   * Sets the flags accordingly.
+   */
   private void checkStartAndFinish() {
-
+    // finish
     if (track.getFinishRect()
         .contains(Math.round(car.getPosition().getX()), Math.round(car.getPosition().getY()))) {
       if (passedCheckpoint) {
@@ -56,13 +42,19 @@ public class GameModel {
       passedStart = true;
     }
 
+    // checkpoint
     if (track.getCheckPointRect()
         .contains(Math.round(car.getPosition().getX()), Math.round(car.getPosition().getY()))) {
       passedCheckpoint = true;
     }
   }
 
-
+  /**
+   * Set the new velocity depending on elapsed time since last timeframe
+   * and forces calculated by the getforces() Method.
+   *
+   * @param delta elapsed time
+   */
   private void setNewVelocity(double delta) {
     double allForces = 0;
     if (accelerate) {
@@ -82,22 +74,52 @@ public class GameModel {
 
   }
 
+  /**
+   * calculate all forces on the race car.
+   */
   private double getForces() {
     return carFriction() + airResistance() / Settings.carWeigth;
   }
 
+  /**
+   * get friction depending on the surface.
+   */
   private double carFriction() {
     if (track.isOnTrack(car.getPosition())) {
-      return Settings.CONCRETERESISTANCE * Settings.normalForce;
+      return Settings.CONCRETERESISTANCE * Settings.normalForce * 5;
     } else {
-      return Settings.OFFROADRESISTANCE * Settings.normalForce;
+      return Settings.OFFROADRESISTANCE * Settings.normalForce * 10;
     }
   }
 
+  /**
+   * get the air resistance depending on the velocity of the car.
+   */
   private double airResistance() {
     return Settings.AIRFACTOR * Settings.CARSURFACE * (Settings.AIRDENSITY * (1 / 2)) * car
         .getVelocity()
         * car.getVelocity();
+  }
+
+  /**
+   * Check if the car Rectangle intersects with any obstacle on the track.
+   *
+   * @param carRect the racecar
+   */
+  public void collisionDetection(Rectangle carRect) {
+    for (Obstacle obstacle : track.getObstacles()) {
+      Circle circle = new Circle(obstacle.getPosition().getX()+obstacle.getRadius()/2,
+          obstacle.getPosition().getY()+obstacle.getRadius()/2,
+          obstacle.getRadius()/2);
+      if (circle.getLayoutBounds().intersects(carRect.getLayoutBounds())) {
+        if (car.getVelocity() >= Settings.CRASHTHRESHOLD) {
+          alive = false;
+        }
+        {
+          car.setVelocity(0);
+        }
+      }
+    }
   }
 
   /**
@@ -117,7 +139,6 @@ public class GameModel {
    * @param delta elapsed time for calculations
    */
   public void updateCar(double delta) {
-
     setNewVelocity(delta);
     if (brake) {
       car.brake(delta);
@@ -182,6 +203,8 @@ public class GameModel {
     }
   }
 
+
+  // Getter and Setter
   public Track getTrack() {
     return track;
   }
@@ -204,10 +227,6 @@ public class GameModel {
 
   public boolean isPassedStart() {
     return passedStart;
-  }
-
-  public boolean isPassedCheckpoint() {
-    return passedCheckpoint;
   }
 
   public Vector2D getCarPosition() {

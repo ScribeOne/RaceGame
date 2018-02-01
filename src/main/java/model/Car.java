@@ -3,7 +3,9 @@ package model;
 import controller.Settings;
 
 /**
- * Represents the race-car in the game
+ * Represents the race-car in the game. Has a postion and a direction represented by 2D Vectors.
+ * Velocity is a double because forces only point into 2 opposite direction.
+ * Therefore no need to treat velocity as a Vector.
  */
 public class Car {
 
@@ -23,19 +25,44 @@ public class Car {
   /**
    * Check if car is moving.
    */
-  public boolean isMoving(){
-    return velocity!=0;
+  public boolean isMoving() {
+    return velocity != 0;
   }
 
+  /**
+   * move the car into its direction according to elapsed time since last update.
+   *
+   * @param delta elapsed time
+   */
+  public void moveCar(double delta) {
+    direction.normalize();
+    position = position.add(direction.multiply(velocity).multiply(delta));
+  }
+
+  /**
+   * steer racecar to the right.
+   */
   public void steerRight() {
-    direction.rotate(0.03);
+    if (isMoving()) {
+      direction.rotate(0.03);
+    }
   }
 
+  /**
+   * steer racecar to the left.
+   */
   public void steerLeft() {
-    direction.rotate(-0.03);
+    if (isMoving()) {
+      direction.rotate(-0.03);
+    }
   }
 
 
+  /**
+   * slow down the car according to elpased time with brake value from Settings.
+   *
+   * @param delta elapsed time in seconds
+   */
   public void brake(double delta) {
     if (velocity < Settings.MAXSPEED * -1) {
       velocity = Settings.MAXSPEED * -1;
@@ -46,16 +73,18 @@ public class Car {
     }
   }
 
-
-  public void moveCar(double delta) {
-    direction.normalize();
-    position = position.add(direction.multiply(velocity).multiply(delta));
-  }
-
+  /**
+   * get the angle of the car direction relative to the zero degree direction of Settings file.
+   *
+   * @return angle in degrees
+   */
   public double getAngle() {
     return direction.getAngle(direction, Settings.ZERODEGREES);
   }
 
+  /**
+   * reset the direction of the racecar to east.
+   */
   public void resetDirection() {
     direction.setX(1);
     direction.setY(0);
@@ -65,7 +94,6 @@ public class Car {
   /*
    *Getter and Setter
    */
-
   public void setVelocity(double velocity) {
     this.velocity = velocity;
   }
@@ -78,16 +106,11 @@ public class Car {
     return velocity;
   }
 
-  public void setPosition(Vector2D position) {
-    this.position = position;
-  }
-
   public Vector2D getDirection() {
     return direction;
   }
 
-  public void setDirection(Vector2D direction) {
-    this.direction = direction;
+  public void setPosition(Vector2D position) {
+    this.position = position;
   }
-
 }

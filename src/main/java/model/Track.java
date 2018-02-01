@@ -8,7 +8,9 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
 /**
- * Class to represent the race track.
+ * Class to represent the race track. Has a Finish and Checkpoint line.
+ * Obstacles are created by the track.
+ * Has a method to check of a position with x and y is on it.
  */
 public class Track {
 
@@ -32,29 +34,21 @@ public class Track {
     this.outerRadiusX = outerRadiusX;
     this.outerRadiusY = outerRadiusY;
     this.obstacles = new LinkedList<>();
-
     this.tracksize = outerRadiusX - innerRadiusX;
 
+    /*
+     *create finish and checkpoint line
+     *at the top and bottom in the middle of the track
+     */
     finishUp = new Point2D(centerX, centerY - outerRadiusY);
     finishDown = new Point2D(centerX, centerY - innerRadiusY);
-
     checkpointUp = new Point2D(centerX, centerY + outerRadiusY);
     checkPointDown = new Point2D(centerX, centerY + innerRadiusY);
-
     finish = new Line(finishUp.getX(), finishUp.getY(), finishDown.getX(), finishDown.getY());
     checkpoint = new Line(checkpointUp.getX(), checkpointUp.getY(), checkPointDown.getY(),
         checkPointDown.getY());
-
-    finishRect = new Rectangle(centerX, centerY - outerRadiusY, 5, tracksize);
-    checkPointRect = new Rectangle(centerX, centerY + innerRadiusY, 5, tracksize);
-  }
-
-  public Rectangle getFinishRect() {
-    return finishRect;
-  }
-
-  public boolean isOnTrack(Vector2D position) {
-    return isOnOuterTrack(position) && !isOnInnerTrack(position);
+    finishRect = new Rectangle(centerX, centerY - outerRadiusY, 7, tracksize);
+    checkPointRect = new Rectangle(centerX, centerY + innerRadiusY, 7, tracksize);
   }
 
   /**
@@ -71,18 +65,15 @@ public class Track {
       for (Obstacle obstacle : obstacles) {
         Vector2D distance = new Vector2D();
         double dist = distance.distance(obstacle.getPosition(), helper.getPosition());
-        if (dist <= Settings.meterToPixel(Settings.CARHEIGHT * 2)) {
+        if (dist <= Settings.meterToPixel(Settings.CARHEIGHT * 3)) {
           tooClose = true;
         }
       }
       if (!tooClose) {
         obstacles.add(helper);
-      } else {
-        helper = null;
       }
     }
   }
-
 
   /**
    * find location for an obstacle.
@@ -95,15 +86,25 @@ public class Track {
       position.setX((Math.random() * Settings.WIDTH));
       position.setY((Math.random() * Settings.HEIGHT));
       if (isOnTrack(position)) {
-        if (!((position.getX() > 600 && position.getX() < 800) && position.getY() < 500)) {
+        if (!((position.getX() > 500 && position.getX() < 800) && position.getY() < 500)) {
           return new Obstacle(position, Settings.OBSTACLERADIUS);
         }
-      } else {
-        position = null;
       }
     }
   }
 
+  /**
+   * position is on the track if it is in the outer but not in the inner ellipse.
+   *
+   * @param position to check
+   */
+  public boolean isOnTrack(Vector2D position) {
+    return isOnOuterTrack(position) && !isOnInnerTrack(position);
+  }
+
+  /**
+   * check if position is on the outer ellipse.
+   */
   private boolean isOnOuterTrack(Vector2D position) {
     double part1 =
         ((position.getX() - centerX) * (position.getX() - centerX)) / (outerRadiusX * outerRadiusX);
@@ -112,6 +113,9 @@ public class Track {
     return (part1 + part2 <= 1);
   }
 
+  /**
+   * check if position is on the inner ellipse.
+   */
   private boolean isOnInnerTrack(Vector2D position) {
     double part1 =
         ((position.getX() - centerX) * (position.getX() - centerX)) / (innerRadiusX * innerRadiusX);
@@ -121,9 +125,15 @@ public class Track {
   }
 
 
-  // Getter and Setter
+  /*
+   * Getter and Setter
+   */
   public LinkedList<Obstacle> getObstacles() {
     return obstacles;
+  }
+
+  public Rectangle getFinishRect() {
+    return finishRect;
   }
 
   public double getInnerRadiusX() {

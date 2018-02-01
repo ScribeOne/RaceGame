@@ -15,9 +15,10 @@ public class SoundController {
   private boolean menu, alive, accelerate, isMoving;
 
   /**
-   * Constructor
+   * Constructor sets up all sound players.
+   * Every file needs its own Mediaplayer.
    */
-  public SoundController(){
+  public SoundController() {
     setupEngineSound();
     setupMenuMusic();
     setupCarSound();
@@ -27,7 +28,7 @@ public class SoundController {
   /**
    * update flags
    */
-  public void update(boolean menu, boolean alive, boolean accelerate, boolean isMoving){
+  public void update(boolean menu, boolean alive, boolean accelerate, boolean isMoving) {
     this.menu = menu;
     this.alive = alive;
     this.accelerate = accelerate;
@@ -40,7 +41,9 @@ public class SoundController {
   public void playSound(boolean sound) {
     if (sound) {
       playCarSound();
-      playIntroMusic();
+
+      // Turn into sound on here
+      //playIntroMusic();
       playEngineRunningSound();
       playExplosionSound();
     }
@@ -64,6 +67,10 @@ public class SoundController {
   }
 
 
+  /**
+   * Setup explosion sound Player. no need for end of media workaround.
+   * Only played once a game. can be played again after game has been reset.
+   */
   private void setupExplosionSound() {
     String mediafile = Settings.EXPOSIONSOUND;
     Media sound = new Media(this.getClass().getResource(mediafile).toExternalForm());
@@ -110,6 +117,9 @@ public class SoundController {
     }
   }
 
+  /**
+   * play the explosion sound.
+   */
   private void playExplosionSound() {
     if (!alive && !menu) {
       explosionPlayer.play();
@@ -138,21 +148,5 @@ public class SoundController {
     } else {
       effectPlayer.stop();
     }
-  }
-
-  public void setMenu(boolean menu) {
-    this.menu = menu;
-  }
-
-  public void setAlive(boolean alive) {
-    this.alive = alive;
-  }
-
-  public void setAccelerate(boolean accelerate) {
-    this.accelerate = accelerate;
-  }
-
-  public void setMoving(boolean moving) {
-    isMoving = moving;
   }
 }

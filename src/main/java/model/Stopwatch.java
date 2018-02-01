@@ -10,7 +10,6 @@ public class Stopwatch {
   private long pauseTime;
   private boolean running;
   private boolean paused;
-  private boolean elapsedTime;
 
   /**
    * Default constructor

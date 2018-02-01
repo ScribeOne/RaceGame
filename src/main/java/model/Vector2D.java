@@ -5,7 +5,6 @@ package model;
  */
 public class Vector2D {
 
-
   //Variables
   private double x;
   private double y;
@@ -81,11 +80,17 @@ public class Vector2D {
     return helper;
   }
 
+  /**
+   * calculate the cross product with the formula.
+   */
   public double crossProduct(Vector2D other) {
     return x * other.getX() + y * other.getY();
   }
 
 
+  /**
+   * rotate a vector on given degree.
+   */
   public void rotate(double n) {
     x = (x * Math.cos(n)) - (y * Math.sin(n));
     y = (x * Math.sin(n)) + (y * Math.cos(n));
@@ -105,7 +110,9 @@ public class Vector2D {
   }
 
 
-  //Getter and Setter
+  /*
+   * Getter and Setter
+   */
   public double getX() {
     return x;
   }

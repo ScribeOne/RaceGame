@@ -25,7 +25,7 @@ public class Vector2DTest {
     Vector2D vector1 = new Vector2D(-30,60);
     Vector2D vector2 = new Vector2D(50,15);
     Vector2D result = vector1.add(vector2);
-    assertEquals(20.0f,result.getX(),0.5f);
+    assertEquals(20.0f,result.getX(),0.05f);
   }
 
   @Test
